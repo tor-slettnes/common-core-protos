@@ -13,8 +13,8 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
-import "version.proto";
-import "signal.proto";
+import "cc/protobuf/core/version.proto";
+import "cc/protobuf/core/signal.proto";
 
 service SysConfig
 {

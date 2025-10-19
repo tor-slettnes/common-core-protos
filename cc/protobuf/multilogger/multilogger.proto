@@ -9,11 +9,11 @@ syntax = "proto3";
 
 package cc.platform.multilogger;
 
-import "status.proto";
-import "datetime.proto";
-import "variant.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "cc/protobuf/core/status.proto";
+import "cc/protobuf/core/datetime.proto";
+import "cc/protobuf/core/variant.proto";
 
 service MultiLogger
 {

@@ -9,11 +9,11 @@ syntax = "proto3";
 
 package cc.platform.upgrade;
 
-import "vfs.proto";
-import "version.proto";
-import "signal.proto";
-import "status.proto";
 import "google/protobuf/empty.proto";
+import "cc/protobuf/core/version.proto";
+import "cc/protobuf/core/signal.proto";
+import "cc/protobuf/core/status.proto";
+import "cc/protobuf/vfs/vfs.proto";
 
 service Upgrade
 {

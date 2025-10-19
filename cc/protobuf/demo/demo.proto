@@ -9,11 +9,11 @@ syntax = "proto3";
 
 package cc.demo;
 
-import "datetime.proto";
-import "variant.proto";
-import "signal.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
+import "cc/protobuf/core/datetime.proto";
+import "cc/protobuf/core/variant.proto";
+import "cc/protobuf/core/signal.proto";
 
 //==============================================================================
 // Service

@@ -11,9 +11,9 @@ package cc.switchboard;
 
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
-import "status.proto";
-import "variant.proto";
-import "signal.proto";
+import "cc/protobuf/core/status.proto";
+import "cc/protobuf/core/variant.proto";
+import "cc/protobuf/core/signal.proto";
 
 
 
