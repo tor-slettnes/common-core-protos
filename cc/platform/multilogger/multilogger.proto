@@ -11,9 +11,9 @@ package cc.platform.multilogger;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
-import "cc/protobuf/core/status.proto";
-import "cc/protobuf/core/datetime.proto";
-import "cc/protobuf/core/variant.proto";
+import "cc/protobuf/status/status.proto";
+import "cc/protobuf/datetime/datetime.proto";
+import "cc/protobuf/variant/variant.proto";
 
 service MultiLogger
 {
@@ -53,7 +53,7 @@ service MultiLogger
     rpc list_message_fields (google.protobuf.Empty) returns (FieldNames);
 
     // Return a list of keys corresponding to fields in logged errors, more or
-    // less the static field names from `cc.status.Error`. These can be included
+    // less the static field names from `cc.protobuf.status.Error`. These can be included
     // as `contract_fields` when adding a CSV or DB sink with contract id
     // `error`.
     rpc list_error_fields (google.protobuf.Empty) returns (FieldNames);
@@ -74,7 +74,7 @@ message Loggable
         Data data = 9;
 
         // Structured error data.
-        cc.status.Error error = 10;
+        cc.protobuf.status.Error error = 10;
     }
 }
 
@@ -87,7 +87,7 @@ message Message
     google.protobuf.Timestamp timestamp = 2;
 
     // Severity level
-    cc.status.Level level = 3;
+    cc.protobuf.status.Level level = 3;
 
     // Reporting host (name or address).
     string host = 4;
@@ -117,7 +117,7 @@ message Message
     string function_name = 14;
 
     // Arbitary attributes
-    cc.variant.KeyValueMap attributes = 15;
+    cc.protobuf.variant.KeyValueMap attributes = 15;
 }
 
 message Data
@@ -131,7 +131,7 @@ message Data
     google.protobuf.Timestamp timestamp = 2;
 
     // Custom attributes. These should be consistent for a given contract.
-    cc.variant.KeyValueMap attributes = 3;
+    cc.protobuf.variant.KeyValueMap attributes = 3;
 }
 
 //==============================================================================
@@ -159,7 +159,7 @@ message SinkSpec
     optional string contract_id = 4;
 
     // Minimum severity level to capture
-    optional cc.status.Level min_level = 5;
+    optional cc.protobuf.status.Level min_level = 5;
 
     // Filename template, used by log sinks that write directly to files.  If
     // not provided, defaults to `{sink_id}` followed by enough date/time fields
@@ -190,7 +190,7 @@ message SinkSpec
 
     // How frequently to rotate/switch log files.
     // If not provided, daily rotation is assumed.
-    cc.datetime.Interval rotation_interval = 9;
+    cc.protobuf.datetime.Interval rotation_interval = 9;
 
     // Use local time rather than UTC for filename expansions, file rotations
     // and printable timestamps within log. Defaults to `true` if unspecified.
@@ -201,7 +201,7 @@ message SinkSpec
 
     // How long to retain log files before expiration
     // Defaults to one year if not specified.
-    cc.datetime.Interval expiration_interval = 12;
+    cc.protobuf.datetime.Interval expiration_interval = 12;
 
     // What fields from matching events to include in log. This is used by
     // column-oriented log sinks, such as CSV file output and when logging to a
@@ -231,7 +231,7 @@ message ColumnSpec
 
     // What event field to capture. Generally speaking this will be
     //   - a static field from `Message`, above,
-    //   - a static field from `cc.status.Error` type, or
+    //   - a static field from `cc.protobuf.status.Error` type, or
     //   - a dynamic field from a Data record.
     string field_name = 1;
 
@@ -288,7 +288,7 @@ message ListenerSpec
     string sink_id = 1;
 
     // Event stream: Minimum severity / logging level
-    cc.status.Level min_level = 8;
+    cc.protobuf.status.Level min_level = 8;
 
     // Data stream: contract/schema ID
     optional string contract_id = 10;

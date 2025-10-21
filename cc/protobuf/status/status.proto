@@ -7,10 +7,10 @@
 
 syntax = "proto3";
 
-package cc.status;
+package cc.protobuf.status;
 
 import "google/protobuf/timestamp.proto";
-import "cc/protobuf/core/variant.proto";
+import "cc/protobuf/variant/variant.proto";
 
 // Data pertaining to errors
 // This message structure is
@@ -40,7 +40,7 @@ message Error
     google.protobuf.Timestamp timestamp = 7;
 
     // Event attributes
-    cc.variant.KeyValueMap attributes = 14;
+    cc.protobuf.variant.KeyValueMap attributes = 14;
 
     // Description of error, possibly expanded with attribute values.
     string text = 15;

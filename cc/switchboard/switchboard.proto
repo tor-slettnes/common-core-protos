@@ -11,10 +11,9 @@ package cc.switchboard;
 
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
-import "cc/protobuf/core/status.proto";
-import "cc/protobuf/core/variant.proto";
-import "cc/protobuf/core/signal.proto";
-
+import "cc/protobuf/status/status.proto";
+import "cc/protobuf/variant/variant.proto";
+import "cc/protobuf/signal/signal.proto";
 
 
 //==============================================================================
@@ -120,7 +119,7 @@ service Switchboard
     // stremed back for each global switch, containing its current specification
     // and status, respectively. Subsequent updates occur whenever there is a
     // change, also if triggered from this client.
-    rpc watch (cc.signal.Filter) returns (stream Signal);
+    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
 }
 
 
@@ -423,7 +422,7 @@ message InterceptorResult
 {
     string switch_name = 1;
     string interceptor_name = 2;
-    optional cc.status.Error error = 8;
+    optional cc.protobuf.status.Error error = 8;
 }
 
 
@@ -447,12 +446,12 @@ message SetTargetRequest
 
     // Error data. Ignored if target_state is provided but is not one of
     // STATE_FAILING or STATE_FAILED.
-    optional cc.status.Error error = 3;
+    optional cc.protobuf.status.Error error = 3;
 
     // Assign arbitrary tag/value pairs to this switch once the transition is
     // complete. Also provided as optional inputs to any interceptors invoked
     // as part of the transition.
-    cc.variant.KeyValueMap attributes = 7;
+    cc.protobuf.variant.KeyValueMap attributes = 7;
 
     // Clear existing attributes when setting new ones.
     bool clear_existing = 8;
@@ -493,7 +492,7 @@ message SetAttributesRequest
 
     // Assign arbitrary tag/value pairs to this switch once the transition is
     // complete.
-    cc.variant.KeyValueMap attributes = 8;
+    cc.protobuf.variant.KeyValueMap attributes = 8;
 
     // Clear existing attributes when setting new ones.
     bool clear_existing = 9;
@@ -537,8 +536,8 @@ message Status
     State settled_state = 3;    // Last settled state
     bool active = 4;            // Settled value
     bool pending = 5;           // Switch is currently running interceptors
-    optional cc.status.Error error = 8; // Error code
-    cc.variant.KeyValueMap attributes = 9; // Arbitrary data associated with current state
+    optional cc.protobuf.status.Error error = 8; // Error code
+    cc.protobuf.variant.KeyValueMap attributes = 9; // Arbitrary data associated with current state
 }
 
 message StatusMap
@@ -548,7 +547,7 @@ message StatusMap
 
 message ErrorMap
 {
-    map<string, cc.status.Error> map = 1; // switch -> EventData
+    map<string, cc.protobuf.status.Error> map = 1; // switch -> EventData
 }
 
 //==============================================================================
@@ -579,7 +578,7 @@ message Signal
     // Mapping type, one of: MAP_NONE, MAP_ADDITION, MAP_UPDATE, MAP_REMOVAL.
     // In the case of a MappingSignal (like `Greeting` below), indicates
     // whether this instance is added, updated, or removed.
-    cc.signal.MappingAction mapping_action = 1;
+    cc.protobuf.signal.MappingAction mapping_action = 1;
 
     // Mapping key for the item that was added/removed/updated.
     string mapping_key = 2;

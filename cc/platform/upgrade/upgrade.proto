@@ -10,10 +10,10 @@ syntax = "proto3";
 package cc.platform.upgrade;
 
 import "google/protobuf/empty.proto";
-import "cc/protobuf/core/version.proto";
-import "cc/protobuf/core/signal.proto";
-import "cc/protobuf/core/status.proto";
-import "cc/protobuf/vfs/vfs.proto";
+import "cc/protobuf/version/version.proto";
+import "cc/protobuf/signal/signal.proto";
+import "cc/protobuf/status/status.proto";
+import "cc/platform/vfs/vfs.proto";
 
 service Upgrade
 {
@@ -82,7 +82,7 @@ service Upgrade
     //
     // The output is a stream of `Signal` messages, each containing exactly
     // one event as described below.
-    rpc watch (cc.signal.Filter)
+    rpc watch (cc.protobuf.signal.Filter)
         returns (stream Signal);
 }
 
@@ -133,7 +133,7 @@ message PackageInfo
     bool is_applicable = 1;
     PackageSource source = 2;
     string product_name = 4;
-    cc.version.Version release_version = 5;
+    cc.protobuf.version.Version release_version = 5;
     string release_description = 6;
     bool reboot_required = 8;
 }
@@ -172,7 +172,7 @@ message UpgradeProgress
     ProgressFraction task_progress = 5;
     ProgressFraction total_progress = 6;
 
-    optional cc.status.Error error = 15;
+    optional cc.protobuf.status.Error error = 15;
 }
 
 
@@ -195,7 +195,7 @@ message Signal
 
     // Mapping type, one of: MAP_ADDITION, MAP_UPDATE or MAP_REMOVAL.
     // Indicates whether the event is new/updated or no longer applicable.
-    cc.signal.MappingAction mapping_action = 1;
+    cc.protobuf.signal.MappingAction mapping_action = 1;
 
     oneof signal {
 

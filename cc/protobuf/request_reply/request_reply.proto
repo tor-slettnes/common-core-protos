@@ -8,10 +8,10 @@
 
 syntax = "proto3";
 
-package cc.rr;
+package cc.protobuf.request_reply;
 
-import "cc/protobuf/core/status.proto";
-import "cc/protobuf/core/variant.proto";
+import "cc/protobuf/status/status.proto";
+import "cc/protobuf/variant/variant.proto";
 
 //==============================================================================
 // Request
@@ -63,7 +63,7 @@ message Parameter
     oneof param
     {
         bytes serialized_proto = 8;      // Serialized ProtoBuf message
-        cc.variant.Value variant_value = 9; // Variant value (possibly nested)
+        cc.protobuf.variant.Value variant_value = 9; // Variant value (possibly nested)
     }
 }
 
@@ -89,5 +89,5 @@ message Status
     StatusCode code = 1;
 
     /// Additional details for invalid/cancelled/failed requests
-    cc.status.Error details = 2;
+    cc.protobuf.status.Error details = 2;
 };

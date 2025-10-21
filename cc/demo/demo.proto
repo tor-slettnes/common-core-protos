@@ -11,9 +11,9 @@ package cc.demo;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "cc/protobuf/core/datetime.proto";
-import "cc/protobuf/core/variant.proto";
-import "cc/protobuf/core/signal.proto";
+import "cc/protobuf/datetime/datetime.proto";
+import "cc/protobuf/variant/variant.proto";
+import "cc/protobuf/signal/signal.proto";
 
 //==============================================================================
 // Service
@@ -33,7 +33,7 @@ service Demo {
     rpc stop_ticking (google.protobuf.Empty) returns (google.protobuf.Empty);
 
     // Stream signals from the server
-    rpc watch (cc.signal.Filter) returns (stream Signal);
+    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
 }
 
 //==============================================================================
@@ -54,15 +54,15 @@ message Greeting
     google.protobuf.Timestamp birth = 4;
 
     // Arbitrary key/value pairs associated with the greeting
-    cc.variant.KeyValueMap data = 5;
+    cc.protobuf.variant.KeyValueMap data = 5;
 }
 
 
 message TimeData
 {
     google.protobuf.Timestamp timestamp = 1; // Common timestamp
-    cc.datetime.TimeStruct local_time = 2;   // Local calendar time
-    cc.datetime.TimeStruct utc_time = 3;     // Greenwich calendar time
+    cc.protobuf.datetime.TimeStruct local_time = 2;   // Local calendar time
+    cc.protobuf.datetime.TimeStruct utc_time = 3;     // Greenwich calendar time
 }
 
 
@@ -84,7 +84,7 @@ message Signal
     // Mapping type, one of: MAP_NONE, MAP_ADDITION, MAP_UPDATE, MAP_REMOVAL.
     // In the case of a MappingSignal (like `Greeting` below), indicates
     // whether this instance is added, updated, or removed.
-    cc.signal.MappingAction mapping_action = 1;
+    cc.protobuf.signal.MappingAction mapping_action = 1;
 
     // Mapping key for the item that was added/removed/updated.
     string mapping_key = 2;

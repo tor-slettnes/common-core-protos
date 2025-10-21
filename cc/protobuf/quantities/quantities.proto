@@ -1,13 +1,13 @@
 // -*- Protocol-Buffers -*-
 //==============================================================================
-/// @file quantity.proto
+/// @file quantities.proto
 /// @brief ProtoBuf message types for common physics quantities
 /// @author Tor Slettnes <tor@slett.net>
 //==============================================================================
 
 syntax = "proto3";
 
-package cc.quantities;
+package cc.protobuf.quantities;
 
 
 //-------------------------------------------------------------------------------

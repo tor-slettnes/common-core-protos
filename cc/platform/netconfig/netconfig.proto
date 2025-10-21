@@ -12,7 +12,7 @@ package cc.platform.netconfig;
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
-import "cc/protobuf/core/signal.proto";
+import "cc/protobuf/signal/signal.proto";
 
 service NetConfig
 {
@@ -41,7 +41,7 @@ service NetConfig
 
     //========================================================================
     // Watch for changes
-    rpc watch (cc.signal.Filter) returns (stream Signal);
+    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
 }
 
 // IP Configuration
@@ -659,7 +659,7 @@ message Signal
     // Mapping type, one of: MAP_NONE, MAP_ADDITION, MAP_REMOVAL, MAP_UPDATE.
     // In the case of a MappingSignal (all but `global` below), indicates
     // whether this instance is added, updated, or removed.
-    cc.signal.MappingAction mapping_action = 1;
+    cc.protobuf.signal.MappingAction mapping_action = 1;
 
     // Mapping key for the item that was added/removed/updated.
     string mapping_key = 2;

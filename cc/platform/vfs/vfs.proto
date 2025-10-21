@@ -11,8 +11,8 @@ package cc.platform.vfs;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
-import "cc/protobuf/core/signal.proto";
-import "cc/protobuf/core/variant.proto";
+import "cc/protobuf/signal/signal.proto";
+import "cc/protobuf/variant/variant.proto";
 
 service VirtualFileSystem
 {
@@ -78,7 +78,7 @@ service VirtualFileSystem
     rpc write_file (stream FileChunk) returns (google.protobuf.Empty);
 
     // Return attributes associated with the specified path.
-    rpc get_attributes (Path) returns (cc.variant.KeyValueMap);
+    rpc get_attributes (Path) returns (cc.protobuf.variant.KeyValueMap);
 
     // Set/update attributes associated with the specified path.
     rpc set_attributes (AttributeRequest) returns (google.protobuf.Empty);
@@ -88,7 +88,7 @@ service VirtualFileSystem
 
     //========================================================================
     // Watch for changes
-    rpc watch (cc.signal.Filter) returns (stream Signal);
+    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
 }
 
 
@@ -192,7 +192,7 @@ message LocateRequest
 
     // Zero or more tag/value pairs to match.
     // Tags may be repeated for cumulative value matches.
-    cc.variant.TaggedValueList attribute_filters = 5;
+    cc.protobuf.variant.TaggedValueList attribute_filters = 5;
 
     // Include custom attributes in request
     bool with_attributes = 8;
@@ -220,7 +220,7 @@ message FileInfo
     google.protobuf.Timestamp accessTime = 12;  // Last access
     google.protobuf.Timestamp modifyTime = 13;  // Last modification
     google.protobuf.Timestamp createTime = 14;  // Creation
-    cc.variant.KeyValueMap attributes = 15; // Custom file attributes
+    cc.protobuf.variant.KeyValueMap attributes = 15; // Custom file attributes
     // TBD: Access Control Lists, SELinux contexts
 }
 
@@ -232,7 +232,7 @@ message Directory
 message AttributeRequest
 {
     Path path = 1;
-    cc.variant.KeyValueMap attributes = 2;
+    cc.protobuf.variant.KeyValueMap attributes = 2;
 }
 
 message VolumeInfo
@@ -266,7 +266,7 @@ message Signal
 {
     // Mapping type, one of: MAP_NONE, MAP_ADDITION, MAP_REMOVAL, MAP_UPDATE.
     // Indicates whether this instance is added, updated, or removed.
-    cc.signal.MappingAction mapping_action = 1;
+    cc.protobuf.signal.MappingAction mapping_action = 1;
 
     // Mapping key for the item that was added/removed/updated.
     string mapping_key = 2;

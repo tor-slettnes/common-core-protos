@@ -13,8 +13,8 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
-import "cc/protobuf/core/version.proto";
-import "cc/protobuf/core/signal.proto";
+import "cc/protobuf/version/version.proto";
+import "cc/protobuf/signal/signal.proto";
 
 service SysConfig
 {
@@ -96,7 +96,7 @@ service SysConfig
     //--------------------------------------------------------------------------
     // Watch for changes from server
 
-    rpc watch (cc.signal.Filter) returns (stream Signal);
+    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
 }
 
 //------------------------------------------------------------------------------
@@ -110,8 +110,8 @@ message ProductInfo
     string serial_number = 4;
     string model_name = 5;
 
-    cc.version.Version release_version = 8;
-    cc.version.ComponentVersions component_versions = 9;
+    cc.protobuf.version.Version release_version = 8;
+    cc.protobuf.version.ComponentVersions component_versions = 9;
     SubsystemInfo subsystem_info = 15;
 }
 
