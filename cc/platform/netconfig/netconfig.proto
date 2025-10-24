@@ -292,23 +292,23 @@ enum EAP_Phase2
 {
     // Synchronized to IEEE8021X_EAP_Phase2 enumeration in
     // '../cpp/interface/netconfig-netconfig-structs.h'.
-    Phase2_NONE = 0;
-    Phase2_MD5 = 1;
-    Phase2_GTC = 2;
-    Phase2_PAP = 3;
-    Phase2_CHAP = 4;
-    Phase2_MSCHAP = 5;
-    Phase2_MSCHAPv2 = 6;
-    Phase2_MSCHAPv2_NO_EAP = 7;
+    PHASE2_NONE = 0;
+    PHASE2_MD5 = 1;
+    PHASE2_GTC = 2;
+    PHASE2_PAP = 3;
+    PHASE2_CHAP = 4;
+    PHASE2_MSCHAP = 5;
+    PHASE2_MSCHAP_V2 = 6;
+    PHASE2_MSCHAP_V2_NO_EAP = 7;
 };
 
 enum FAST_Provisioning
 {
-    Provisioning_NONE = 0;
-    Provisioning_DISABLED = 4;
-    Provisioning_ANONYMOUS = 5;
-    Provisioning_AUTHENTICATED = 6;
-    Provisioning_ANY = 7;
+    PROVISIONING_NONE = 0;
+    PROVISIONING_DISABLED = 4;
+    PROVISIONING_ANONYMOUS = 5;
+    PROVISIONING_AUTHENTICATED = 6;
+    PROVISIONING_ANY = 7;
 };
 
 enum AuthenticationProtocol

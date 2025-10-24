@@ -217,9 +217,9 @@ message FileInfo
     uint32 gid   = 9;        // Group numeric ID
     string ownername = 10;   // Owner name
     string groupname = 11;   // Group name (`group` is a reserved ProtoBuf word)
-    google.protobuf.Timestamp accessTime = 12;  // Last access
-    google.protobuf.Timestamp modifyTime = 13;  // Last modification
-    google.protobuf.Timestamp createTime = 14;  // Creation
+    google.protobuf.Timestamp access_time = 12;  // Last access
+    google.protobuf.Timestamp modify_time = 13;  // Last modification
+    google.protobuf.Timestamp create_time = 14;  // Creation
     cc.protobuf.variant.KeyValueMap attributes = 15; // Custom file attributes
     // TBD: Access Control Lists, SELinux contexts
 }
