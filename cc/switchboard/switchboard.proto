@@ -22,44 +22,44 @@ import "cc/protobuf/signal/signal.proto";
 service Switchboard
 {
     // List all switches including specifications and statuses
-    rpc get_switches (google.protobuf.Empty) returns (SwitchMap);
+    rpc GetSwitches (google.protobuf.Empty) returns (SwitchMap);
 
     // Get information about a single switch
-    rpc get_switch (SwitchIdentifier) returns (SwitchInfo);
+    rpc GetSwitch (SwitchIdentifier) returns (SwitchInfo);
 
     // Add a new switch.
     // Returns true if the switch was added, false if it already existed.
-    rpc add_switch (AddSwitchRequest) returns (google.protobuf.BoolValue);
+    rpc AddSwitch (AddSwitchRequest) returns (google.protobuf.BoolValue);
 
     // Remove an existing switch.
     // Returns true if the switch was removed, false if it did not exist.
-    rpc remove_switch (RemoveSwitchRequest) returns (google.protobuf.BoolValue);
+    rpc RemoveSwitch (RemoveSwitchRequest) returns (google.protobuf.BoolValue);
 
     // Update the specification of a switch.
-    rpc set_specification (SetSpecificationRequest) returns (google.protobuf.BoolValue);
+    rpc SetSpecification (SetSpecificationRequest) returns (google.protobuf.BoolValue);
 
     // Get specifications for the specified switches.
     // If no identifiers are provided, get specificaitons for all switches.
-    rpc get_specifications (SwitchIdentifiers) returns (SpecificationMap);
+    rpc GetSpecifications (SwitchIdentifiers) returns (SpecificationMap);
 
     // Add a new upstream dependency (direct ancestor) to a given switch.
     // Returns a boolean indicating that this is a newly added dependency.
-    rpc add_dependency (AddDependencyRequest) returns (google.protobuf.BoolValue);
+    rpc AddDependency (AddDependencyRequest) returns (google.protobuf.BoolValue);
 
     // Remove an existing dependency (direct ancestor) from a given switch.
     // Returns a boolean indicating that the dependency did exist and was removed.
-    rpc remove_dependency (RemoveDependencyRequest) returns (google.protobuf.BoolValue);
+    rpc RemoveDependency (RemoveDependencyRequest) returns (google.protobuf.BoolValue);
 
     // Return a list of dependencies for a given switch.
-    rpc get_dependencies (SwitchIdentifier) returns (DependencyMap);
+    rpc GetDependencies (SwitchIdentifier) returns (DependencyMap);
 
     // Return a list of (direct and indirect) ancestors for a given switch,
     // i.e. other switches on whose state it depends.
-    rpc get_ancestors (SwitchIdentifier) returns (SwitchIdentifiers);
+    rpc GetAncestors (SwitchIdentifier) returns (SwitchIdentifiers);
 
     // Return a list of (direct and indirect) descendents for a given switch,
     // i.e. other switches whose states are affected by this switch.
-    rpc get_descendents (SwitchIdentifier) returns (SwitchIdentifiers);
+    rpc GetDescendents (SwitchIdentifier) returns (SwitchIdentifiers);
 
     // Add an interceptor, i.e., a callback handler in the client that will be
     // invoked when the specified switch changes its current state. The client
@@ -69,23 +69,23 @@ service Switchboard
     // After changing its state, a switch will normally wait for all associated
     // interceptors to complete before undergoing any further state transitions.
     // Returns a boolean indicating whether the interceptor was added.
-    rpc add_interceptor (AddInterceptorRequest) returns (google.protobuf.BoolValue);
+    rpc AddInterceptor (AddInterceptorRequest) returns (google.protobuf.BoolValue);
 
     // Remove an existing interceptor.
     // Return a boolean indicating whether the interceptor existed and was removed.
-    rpc remove_interceptor (RemoveInterceptorRequest) returns (google.protobuf.BoolValue);
+    rpc RemoveInterceptor (RemoveInterceptorRequest) returns (google.protobuf.BoolValue);
 
     // Get a list of interceptors associated with the specified switch.
     // Note that this also includes interceptors owned by other clients.
-    rpc get_interceptors (SwitchIdentifier) returns (InterceptorMap);
+    rpc GetInterceptors (SwitchIdentifier) returns (InterceptorMap);
 
     // Manually invoke a specific interceptor, as if it were triggered by
     // a switch changing its current state.  Primarily a diagnostic tool.
-    rpc invoke_interceptor (InterceptorInvocation) returns (InterceptorResult);
+    rpc InvokeInterceptor (InterceptorInvocation) returns (InterceptorResult);
 
     // Register a handler for interceptor requests from the server.
     // This is a prerequistie for the `add_interceptor()` call.
-    rpc intercept (stream InterceptorResult) returns (stream InterceptorInvocation);
+    rpc Intercept (stream InterceptorResult) returns (stream InterceptorInvocation);
 
     // Change the state of a switch, either to an explicit target state
     // or to a target state inferred based on its dependencies.
@@ -93,33 +93,33 @@ service Switchboard
     // In the latter case, use `get_culprits()` to determine the cause.
     // The return value indicates whether the switch transition takes place
     // (i.e. the target state changed, or the `reevaluate` flag is set).
-    rpc set_target (SetTargetRequest) returns (SetTargetResponse);
+    rpc SetTarget (SetTargetRequest) returns (SetTargetResponse);
 
     // Assign arbitrary key/value pairs on the specified switch, optionally
     // clearing any existing attributes. The update takes place immediately
     // even if a state change is in progress; however will be cleared again
     // upon completion of such state change request if its
     // `clear_existing_attributes` flag was set.
-    rpc set_attributes (SetAttributesRequest) returns (SetAttributesResponse);
+    rpc SetAttributes (SetAttributesRequest) returns (SetAttributesResponse);
 
     // Get current status for the specified switches.
     // If no identifiers are provided, get status of all switches.
-    rpc get_statuses (SwitchIdentifiers) returns (StatusMap);
+    rpc GetStatuses (SwitchIdentifiers) returns (StatusMap);
 
     // Obtain cuplrits indicating why a given switch is currently not set.
     // Returns a map of upstream switches (direct or indirect ancestors)
     // whose current values are in conflict with this switch.
-    rpc get_culprits (CulpritsQuery) returns (StatusMap);
+    rpc GetCulprits (CulpritsQuery) returns (StatusMap);
 
     // Obtain a map of any errors associated with the specified switch and its
     // ancestors that cause its state to be STATE_FAILED.
-    rpc get_errors (SwitchIdentifier) returns (ErrorMap);
+    rpc GetErrors (SwitchIdentifier) returns (ErrorMap);
 
     // Watch for signals from the server.  Upon invocation, a pair of signals is
     // stremed back for each global switch, containing its current specification
     // and status, respectively. Subsequent updates occur whenever there is a
     // change, also if triggered from this client.
-    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
+    rpc Watch (cc.protobuf.signal.Filter) returns (stream Signal);
 }
 
 

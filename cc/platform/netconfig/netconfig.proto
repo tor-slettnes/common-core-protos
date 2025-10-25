@@ -16,32 +16,60 @@ import "cc/protobuf/signal/signal.proto";
 
 service NetConfig
 {
-    rpc get_hostname(google.protobuf.Empty) returns (google.protobuf.StringValue);
-    rpc set_hostname(google.protobuf.StringValue) returns (google.protobuf.Empty);
+    rpc GetHostName (google.protobuf.Empty)
+        returns (google.protobuf.StringValue);
 
-    rpc get_connections(google.protobuf.Empty) returns (ConnectionMap);
-    rpc define_connection(ConnectionRequest) returns (google.protobuf.Empty);
-    rpc remove_connection(MappingKey) returns (google.protobuf.BoolValue);
-    rpc activate_connection(MappingKey) returns (google.protobuf.Empty);
-    rpc deactivate_connection(MappingKey) returns (google.protobuf.Empty);
+    rpc SetHostName (google.protobuf.StringValue)
+        returns (google.protobuf.Empty);
 
-    rpc get_active_connections(google.protobuf.Empty) returns (ActiveConnectionMap);
+    rpc GetConnections (google.protobuf.Empty)
+        returns (ConnectionMap);
 
-    rpc request_scan(google.protobuf.Empty) returns (google.protobuf.Empty);
-    rpc get_aps(google.protobuf.Empty) returns (AccessPointMap);
-    rpc connect_ap(AccessPointConnection) returns (google.protobuf.Empty);
+    rpc DefineConnection (ConnectionRequest)
+        returns (google.protobuf.Empty);
 
-    rpc get_devices(google.protobuf.Empty) returns (DeviceMap);
+    rpc RemoveConnection (MappingKey)
+        returns (google.protobuf.BoolValue);
 
-    rpc get_global_data(google.protobuf.Empty) returns (GlobalData);
+    rpc ActivateConnection (MappingKey)
+        returns (google.protobuf.Empty);
 
-    rpc set_wireless_enabled(RadioState) returns (google.protobuf.Empty);
-    rpc set_wireless_allowed(google.protobuf.BoolValue) returns (google.protobuf.Empty);
-    rpc select_wireless_band(WirelessBandSetting) returns (google.protobuf.Empty);
+    rpc DeactivateConnection (MappingKey)
+        returns (google.protobuf.Empty);
+
+    rpc GetActiveConnections (google.protobuf.Empty)
+        returns (ActiveConnectionMap);
+
+    rpc RequestScan (google.protobuf.Empty)
+        returns (google.protobuf.Empty);
+
+    rpc GetAccessPoints (google.protobuf.Empty)
+        returns (AccessPointMap);
+
+    // Deprecated; use `DefineConnection()` instead.
+    rpc ConnectAccessPoint (WirelessConnectionRequest)
+        returns (google.protobuf.Empty);
+
+    rpc GetDevices (google.protobuf.Empty)
+        returns (DeviceMap);
+
+    rpc GetGlobalData (google.protobuf.Empty)
+        returns (GlobalData);
+
+    rpc SetWirelessEnabled (RadioState)
+        returns (google.protobuf.Empty);
+
+    rpc SetWirelessAllowed (google.protobuf.BoolValue)
+        returns (google.protobuf.Empty);
+
+    rpc SelectWirelessBand (WirelessBandSetting)
+        returns (google.protobuf.Empty);
 
     //========================================================================
     // Watch for changes
-    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
+
+    rpc Watch (cc.protobuf.signal.Filter)
+        returns (stream Signal);
 }
 
 // IP Configuration
@@ -91,8 +119,19 @@ message ConnectionMap
 message ConnectionRequest
 {
     ConnectionData data = 1;
-    bool activate = 2;
+    bool activate = 8;
 }
+
+message WirelessConnectionRequest
+{
+    oneof key
+    {
+        string bssid = 1;
+        bytes ssid = 2;
+    }
+    ConnectionData connection = 8;
+}
+
 
 message ConnectionData
 {
@@ -116,6 +155,7 @@ message WiredConnectionData
     bool auto_negotiate = 1;
 }
 
+
 message WirelessConnectionData
 {
     bytes ssid = 1;
@@ -127,12 +167,15 @@ message WirelessConnectionData
     AuthenticationType auth_type = 7;
     oneof auth
     {
-        WEP_Data wep = 8;
-        WPA_Data wpa = 9;
-        EAP_Data eap = 10;
+        WEPData wep = 8;
+        WPAData wpa = 9;
+        EAPData eap = 10;
     }
-    optional WirelessBandSelection band = 15;
+
+    optional string bssid = 16;
+    optional WirelessBandSelection band = 17;
 }
+
 
 //==============================================================================
 // ActiveConnection
@@ -256,7 +299,7 @@ enum KeyManagement
     KEY_EAP = 6;
 };
 
-enum WEP_KeyType
+enum WEPKeyType
 {
     KEY_TYPE_UNKNOWN    = 0;
     KEY_TYPE_KEY        = 1; /* Hex or ASCII */
@@ -274,7 +317,7 @@ enum AuthenticationAlgorithm
 
 }
 
-enum EAP_Type
+enum EAPType
 {
     // Synchronized to IEEE8021X_EAP_Type enumeration in
     // '../cpp/interface/netconfig-netconfig-structs.h'.
@@ -288,7 +331,7 @@ enum EAP_Type
     EAP_PWD = 7;
 };
 
-enum EAP_Phase2
+enum EAPPhase2
 {
     // Synchronized to IEEE8021X_EAP_Phase2 enumeration in
     // '../cpp/interface/netconfig-netconfig-structs.h'.
@@ -302,7 +345,7 @@ enum EAP_Phase2
     PHASE2_MSCHAP_V2_NO_EAP = 7;
 };
 
-enum FAST_Provisioning
+enum FASTProvisioning
 {
     PROVISIONING_NONE = 0;
     PROVISIONING_DISABLED = 4;
@@ -331,24 +374,24 @@ enum AuthenticationType
     AUTH_TYPE_UNKNOWN = 15;
 };
 
-message WEP_Data
+message WEPData
 {
     AuthenticationAlgorithm auth_alg = 1;
     repeated bytes key = 2;
     uint32 key_idx = 3;
-    WEP_KeyType key_type = 4;
+    WEPKeyType key_type = 4;
 }
 
-message WPA_Data
+message WPAData
 {
     string psk = 1;
 }
 
-message EAP_Data
+message EAPData
 {
     AuthenticationAlgorithm auth_alg = 1;
-    EAP_Type eap_type = 2;
-    EAP_Phase2 eap_phase2 = 3;
+    EAPType eap_type = 2;
+    EAPPhase2 eap_phase2 = 3;
     string anonymous_identity = 4;
     string domain = 5;
     string identity = 6;
@@ -359,7 +402,7 @@ message EAP_Data
     string client_cert_key = 13;
     string client_cert_password = 14;
     string pac_file = 16;
-    FAST_Provisioning fast_provisioning = 17;
+    FASTProvisioning fast_provisioning = 17;
 }
 
 
@@ -395,16 +438,6 @@ enum AccessPointSecurityFlags
 message AccessPointMap
 {
     map<string, AccessPointData> map = 1;
-}
-
-message AccessPointConnection
-{
-    oneof key
-    {
-        string bssid = 1;
-        bytes ssid = 2;
-    }
-    ConnectionData connection = 8;
 }
 
 message AccessPointData
@@ -643,12 +676,12 @@ message MappingKey
 
 //==============================================================================
 // A `Signal` message is a multiplexer for various event types from the server,
-// streamed back to the client in response to a `watch()` invocation, above.
+// streamed back to the client in response to a `Watch()` invocation, above.
 // The event stream continues indefinitely until the client cancels the call or
 // disconnects.
 //
 // To listen for only specific event types, apply a corresponding signal filter
-// as input parameter to the `watch()` call. The filter should contain a list of
+// as input parameter to the `Watch()` call. The filter should contain a list of
 // field indices to include or exclude, based on their field numbers within the
 // `oneof` block below. The filter also contains a `polarity` field to indicate
 // whether the listed fields are to be included (1) or excluded (0).  As such,

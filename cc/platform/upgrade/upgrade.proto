@@ -33,18 +33,18 @@ service Upgrade
     // By default, removable devices (e.g. USB drives) are scanned on insertion,
     // and online checks are performed at regular intervals if an Internet
     // connection is available.
-    rpc scan (PackageSource)
+    rpc Scan (PackageSource)
         returns (PackageCatalogue);
 
     // List available package sources (indexes), whether or not they contain
     // applicable packages.
-    rpc list_sources (google.protobuf.Empty)
+    rpc ListSources (google.protobuf.Empty)
         returns (PackageSources);
 
     // Return information about available upgrade packages discovered during
     // a prior (implicit or explicit) scan of the specified package source
     // if specified, otherwise across all preconfigured/default sources.
-    rpc list_available (PackageSource)
+    rpc ListAvailable (PackageSource)
         returns (PackageCatalogue);
 
     // Return information about the best available upgrade package discovered
@@ -56,7 +56,7 @@ service Upgrade
     //
     // This information is also available by watching the signal
     // `upgrade_available`, below.
-    rpc best_available (PackageSource)
+    rpc BestAvailable (PackageSource)
         returns (PackageInfo);
 
     // Install an upgrade from the specified package source if provided,
@@ -66,12 +66,12 @@ service Upgrade
     // This call returns immediately with information about the package being
     // installed. To monitor the upgrade progress and result use the `watch()`
     // method below.
-    rpc install (InstallRequest)
+    rpc Install (InstallRequest)
         returns (PackageInfo);
 
     // Finalize a completed upgrade. This clears the `upgrade_progress`
     // signal, and if the upgrade requires a system reboot, do so now.
-    rpc finalize (google.protobuf.Empty)
+    rpc Finalize (google.protobuf.Empty)
         returns (google.protobuf.Empty);
 
     // Listen for event updates from server.
@@ -82,7 +82,7 @@ service Upgrade
     //
     // The output is a stream of `Signal` messages, each containing exactly
     // one event as described below.
-    rpc watch (cc.protobuf.signal.Filter)
+    rpc Watch (cc.protobuf.signal.Filter)
         returns (stream Signal);
 }
 

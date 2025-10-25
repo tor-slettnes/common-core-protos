@@ -21,39 +21,39 @@ service SysConfig
     //--------------------------------------------------------------------------
     // Product information
 
-    rpc get_product_info (google.protobuf.Empty) returns (ProductInfo);
-    rpc set_serial_number (google.protobuf.StringValue) returns (google.protobuf.Empty);
-    rpc set_model_name (google.protobuf.StringValue) returns (google.protobuf.Empty);
+    rpc GetProductInfo (google.protobuf.Empty) returns (ProductInfo);
+    rpc SetSerialNumber (google.protobuf.StringValue) returns (google.protobuf.Empty);
+    rpc SetModelName (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
     //--------------------------------------------------------------------------
     // Host Information
 
-    rpc get_host_info (google.protobuf.Empty) returns (HostInfo);
-    rpc set_host_name (google.protobuf.StringValue) returns (google.protobuf.Empty);
+    rpc GetHostInfo (google.protobuf.Empty) returns (HostInfo);
+    rpc SetHostName (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
     //--------------------------------------------------------------------------
     // Time configuration
 
     // Current timestamp
-    rpc set_current_time (google.protobuf.Timestamp) returns (google.protobuf.Empty);
-    rpc get_current_time (google.protobuf.Empty) returns (google.protobuf.Timestamp);
+    rpc SetCurrentTime (google.protobuf.Timestamp) returns (google.protobuf.Empty);
+    rpc GetCurrentTime (google.protobuf.Empty) returns (google.protobuf.Timestamp);
 
     // Get or set time configuration
-    rpc set_time_config (TimeConfig) returns (google.protobuf.Empty);
-    rpc get_time_config (google.protobuf.Empty) returns (TimeConfig);
+    rpc SetTimeConfig (TimeConfig) returns (google.protobuf.Empty);
+    rpc GetTimeConfig (google.protobuf.Empty) returns (TimeConfig);
 
     //--------------------------------------------------------------------------
     // Time zone configuration
 
     // List time zone _areas_, which are continents or oceans. Results are
     // sorted roughly with a west to east then north to south bias.
-    rpc list_timezone_areas (google.protobuf.Empty) returns (TimeZoneAreas);
+    rpc ListTimezoneAreas (google.protobuf.Empty) returns (TimeZoneAreas);
 
     // List countries, optionally within a specific area.
     // Results are sorted alphabetically, except that within "Americas"
     // the North American countries (US, Canada, Mexico) appear first
     // in that order (coincidentally, by their westernmost points).
-    rpc list_timezone_countries (TimeZoneArea) returns (TimeZoneCountries);
+    rpc ListTimezoneCountries (TimeZoneArea) returns (TimeZoneCountries);
 
     // List regions within a specified country, optionally also limited by area.
     // Results are sorted alphabetically, except that within the US the four
@@ -62,41 +62,41 @@ service SysConfig
     //
     // If there are no subregions within the specified country, return an empty
     // response.
-    rpc list_timezone_regions (TimeZoneLocationFilter) returns (TimeZoneRegions);
+    rpc ListTimezoneRegions (TimeZoneLocationFilter) returns (TimeZoneRegions);
 
     // Obtain canonical time zone specifications, optionally restricted by a
     // specific area and/or country.
-    rpc list_timezone_specs (TimeZoneLocationFilter) returns (TimeZoneCanonicalSpecs);
+    rpc ListTimezoneSpecs (TimeZoneLocationFilter) returns (TimeZoneCanonicalSpecs);
 
     /// Return geographic information about a specific canonical timezone. If no
     /// zone name is specified, return info about the currently configured zone.
-    rpc get_timezone_spec (TimeZoneCanonicalName) returns (TimeZoneCanonicalSpec);
+    rpc GetTimezoneSpec (TimeZoneCanonicalName) returns (TimeZoneCanonicalSpec);
 
     /// Get offset information about the specified time zone at the specified
     /// time, or the currently configured zone and/or system time if not
     /// specified. Information includes current and
     /// standard time offsets from UTC, and whether Daylight Savings Time (or
     /// Summer Time) is currently in effect.
-    rpc get_timezone_info (TimeZoneInfoRequest) returns (TimeZoneInfo);
+    rpc GetTimezoneInfo (TimeZoneInfoRequest) returns (TimeZoneInfo);
 
     /// Configure the system time zone. Return the resulting applied zone
     /// information.
-    rpc set_timezone (TimeZoneConfig) returns (TimeZoneInfo);
+    rpc SetTimezone (TimeZoneConfig) returns (TimeZoneInfo);
 
     //--------------------------------------------------------------------------
     // Spawn a new process, with or without capturing stdin/stdout/stderr.
 
-    rpc invoke_sync (CommandInvocation) returns (CommandResponse);
-    rpc invoke_async (CommandInvocation) returns (CommandInvocationResponse);
-    rpc invoke_finish (CommandContinuation) returns (CommandResponse);
+    rpc InvokeSync (CommandInvocation) returns (CommandResponse);
+    rpc InvokeAsync (CommandInvocation) returns (CommandInvocationResponse);
+    rpc InvokeFinish (CommandContinuation) returns (CommandResponse);
     // rpc invoke_piped (stream CommandInvocation) returns (stream CommandResponse);
 
-    rpc reboot (google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc Reboot (google.protobuf.Empty) returns (google.protobuf.Empty);
 
     //--------------------------------------------------------------------------
     // Watch for changes from server
 
-    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
+    rpc Watch (cc.protobuf.signal.Filter) returns (stream Signal);
 }
 
 //------------------------------------------------------------------------------

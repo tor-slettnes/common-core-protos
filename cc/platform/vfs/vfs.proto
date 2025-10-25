@@ -17,13 +17,13 @@ import "cc/protobuf/variant/variant.proto";
 service VirtualFileSystem
 {
     // List known virtual filesystem contexts.
-    rpc get_contexts (google.protobuf.Empty) returns (ContextMap);
+    rpc GetContexts (google.protobuf.Empty) returns (ContextMap);
 
     // List open virtual filesystem contexts.
-    rpc get_open_contexts (google.protobuf.Empty) returns (ContextMap);
+    rpc GetOpenContexts (google.protobuf.Empty) returns (ContextMap);
 
     // List known virtual filesystem contexts.
-    rpc get_context_spec (Path) returns (ContextSpec);
+    rpc GetContextSpec (Path) returns (ContextSpec);
 
     // Explicitly open a virtual context. Internally this increments a reference
     // counter to keep the corresponding virtual filesystem context (VFC) open.
@@ -33,62 +33,62 @@ service VirtualFileSystem
     //
     // Once access is no longer needed The client should invoke
     // `close_context()', thereby allowing the context to be closed.
-    rpc open_context (Path) returns (ContextSpec);
+    rpc OpenContext (Path) returns (ContextSpec);
 
     // Close a previously-opened virtual context. Internally, this decrements a
     // reference counter associated with the underlying filesystem context, and
     // closes the context (e.g. unmounts) if it reaches zero.
-    rpc close_context (Path) returns (google.protobuf.Empty);
+    rpc CloseContext (Path) returns (google.protobuf.Empty);
 
     // Return information about the mounted filesystem containing the specified `path`.
-    rpc get_volume_info (PathRequest) returns (VolumeInfo);
+    rpc GetVolumeInfo (PathRequest) returns (VolumeInfo);
 
     // Return information about the specified `path`.
     // Unlike `list_folder()` this does not descend if the path is a folder,
     // but rather returns the status of the folder itself.
-    rpc get_file_info (PathRequest) returns (FileInfo);
+    rpc GetFileInfo (PathRequest) returns (FileInfo);
 
     // List contents of the specified path (context/folder).
-    rpc get_directory (PathRequest) returns (Directory);
+    rpc GetDirectory (PathRequest) returns (Directory);
 
     /// Recursively locate files matching specific filename and/or attribute patterns.
-    rpc locate (LocateRequest) returns (Directory);
+    rpc Locate (LocateRequest) returns (Directory);
 
     // Copy `sources` to `path`.
     // If multiple sources are specified, `inside_target` must be set to
     // indicate that the target `path` represents a folder.
-    rpc copy (PathRequest) returns (google.protobuf.Empty);
+    rpc Copy (PathRequest) returns (google.protobuf.Empty);
 
     // Move `sources` to `target`.
     // If multiple sources are specified, `inside_target` must be set to
     // indicate that the target `path` represents a folder.
-    rpc move (PathRequest) returns (google.protobuf.Empty);
+    rpc Move (PathRequest) returns (google.protobuf.Empty);
 
     // Create a folder
-    rpc create_folder (PathRequest) returns (google.protobuf.Empty);
+    rpc CreateFolder (PathRequest) returns (google.protobuf.Empty);
 
     // Delete a file or folder as specified by `path`,
     // or multiple files and/or folders specified as `sources`.
-    rpc remove (PathRequest) returns (google.protobuf.Empty);
+    rpc Remove (PathRequest) returns (google.protobuf.Empty);
 
     // Read the specified file, and stream its contents in chunks.
-    rpc read_file (Path) returns (stream FileChunk);
+    rpc ReadFile (Path) returns (stream FileChunk);
 
     // Write to a file in chunks. The path must be specified with the first chunk.
-    rpc write_file (stream FileChunk) returns (google.protobuf.Empty);
+    rpc WriteFile (stream FileChunk) returns (google.protobuf.Empty);
 
     // Return attributes associated with the specified path.
-    rpc get_attributes (Path) returns (cc.protobuf.variant.KeyValueMap);
+    rpc GetAttributes (Path) returns (cc.protobuf.variant.KeyValueMap);
 
     // Set/update attributes associated with the specified path.
-    rpc set_attributes (AttributeRequest) returns (google.protobuf.Empty);
+    rpc SetAttributes (AttributeRequest) returns (google.protobuf.Empty);
 
     // Clear all attributes associated with the specified path.
-    rpc clear_attributes (Path) returns (google.protobuf.Empty);
+    rpc ClearAttributes (Path) returns (google.protobuf.Empty);
 
     //========================================================================
     // Watch for changes
-    rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
+    rpc Watch (cc.protobuf.signal.Filter) returns (stream Signal);
 }
 
 
