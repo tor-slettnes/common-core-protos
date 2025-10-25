@@ -55,7 +55,7 @@
 //   service MyService
 //   {
 //       ...
-//       rpc watch (cc.protobuf.signal.Filter) returns (stream MySignalMultiplexer);
+//       rpc Watch (cc.protobuf.signal.Filter) returns (stream MySignalMultiplexer);
 //   }
 //   ```
 //
@@ -102,7 +102,7 @@ message Filter
     //   service SignalExample
     //   {
     //     /// Watch for signals from server.
-    //     rpc watch (cc.protobuf.signal.Filter) returns (stream Signal);
+    //     rpc Watch (cc.protobuf.signal.Filter) returns (stream Signal);
     //   }
     //
     //   message Signal
@@ -121,7 +121,7 @@ message Filter
     // and `baz`, but not `foo`:
     //
     //   ```python
-    //   >>> for event in client_stub.watch(
+    //   >>> for event in client_stub.Watch(
     //   ...     cc.protobuf.signal.Filter(
     //   ...         polarity=True,
     //   ...         indices=[10, 11])):

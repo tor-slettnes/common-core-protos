@@ -20,7 +20,7 @@ service Upgrade
     // Explicit scan for available upgrade packages in the specified location
     // if provided, otherwise in the preconfigured/default locations.
     //
-    // To observe scan progress, use the `watch()` streaming call
+    // To observe scan progress, use the `Watch()` streaming call
     // to monitor the `scan_progress` signal, below.
     //
     // Once the scan completes a list of package packages discovered in this
@@ -64,7 +64,7 @@ service Upgrade
     // To perform an explicit scan, invoke `scan()` before `install()`.
     //
     // This call returns immediately with information about the package being
-    // installed. To monitor the upgrade progress and result use the `watch()`
+    // installed. To monitor the upgrade progress and result use the `Watch()`
     // method below.
     rpc Install (InstallRequest)
         returns (PackageInfo);
@@ -181,7 +181,7 @@ message UpgradeProgress
 // software upgrade availability or progress.
 //
 // To listen for only specific event types, apply a corresponding signal filter
-// as input parameter to the `watch()` call. The filter should contain a list of
+// as input parameter to the `Watch()` call. The filter should contain a list of
 // field indices to include or exclude, based on their field numbers within the
 // `oneof` block below. The filter also contains a `polarity` field to indicate
 // whether the listed fields are to be included (1) or excluded (0). As such, an
@@ -190,7 +190,7 @@ message UpgradeProgress
 message Signal
 {
     // All of the signals below are cached on the server side,
-    // and replayed in response to subsequant `watch()` invocations
+    // and replayed in response to subsequant `Watch()` invocations
     // (cfr. "late subscriber pattern").
 
     // Mapping type, one of: MAP_ADDITION, MAP_UPDATE or MAP_REMOVAL.
@@ -205,7 +205,7 @@ message Signal
         //  * `MAP_REMOVAL` if the scan has completed.
         //
         // This signal is cached and re-emitted in response to subsequent
-        // `watch()` invocations from newly connected clients.
+        // `Watch()` invocations from newly connected clients.
         ScanProgress scan_progress = 8;
 
         // Emitted on (applicable) software update availability changes.
