@@ -1,76 +1,16 @@
 // -*- Protocol-Buffers -*-
 //==============================================================================
 /// @file netconfig.proto
-/// @brief Network configuration interface
+/// @brief NetConfig data types
 /// @author Tor Slettnes <tor@slett.net>
 //==============================================================================
 
 syntax = "proto3";
 
-package cc.platform.netconfig;
+package cc.platform.netconfig.protobuf;
 
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/wrappers.proto";
 import "cc/protobuf/signal/signal.proto";
-
-service NetConfig
-{
-    rpc GetHostName (google.protobuf.Empty)
-        returns (google.protobuf.StringValue);
-
-    rpc SetHostName (google.protobuf.StringValue)
-        returns (google.protobuf.Empty);
-
-    rpc GetConnections (google.protobuf.Empty)
-        returns (ConnectionMap);
-
-    rpc DefineConnection (ConnectionRequest)
-        returns (google.protobuf.Empty);
-
-    rpc RemoveConnection (MappingKey)
-        returns (google.protobuf.BoolValue);
-
-    rpc ActivateConnection (MappingKey)
-        returns (google.protobuf.Empty);
-
-    rpc DeactivateConnection (MappingKey)
-        returns (google.protobuf.Empty);
-
-    rpc GetActiveConnections (google.protobuf.Empty)
-        returns (ActiveConnectionMap);
-
-    rpc RequestScan (google.protobuf.Empty)
-        returns (google.protobuf.Empty);
-
-    rpc GetAccessPoints (google.protobuf.Empty)
-        returns (AccessPointMap);
-
-    // Deprecated; use `DefineConnection()` instead.
-    rpc ConnectAccessPoint (WirelessConnectionRequest)
-        returns (google.protobuf.Empty);
-
-    rpc GetDevices (google.protobuf.Empty)
-        returns (DeviceMap);
-
-    rpc GetGlobalData (google.protobuf.Empty)
-        returns (GlobalData);
-
-    rpc SetWirelessEnabled (RadioState)
-        returns (google.protobuf.Empty);
-
-    rpc SetWirelessAllowed (google.protobuf.BoolValue)
-        returns (google.protobuf.Empty);
-
-    rpc SelectWirelessBand (WirelessBandSetting)
-        returns (google.protobuf.Empty);
-
-    //========================================================================
-    // Watch for changes
-
-    rpc Watch (cc.protobuf.signal.Filter)
-        returns (stream Signal);
-}
 
 // IP Configuration
 

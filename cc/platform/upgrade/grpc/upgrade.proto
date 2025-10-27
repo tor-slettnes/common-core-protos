@@ -1,0 +1,85 @@
+// -*- Protocol-Buffers -*-
+//==============================================================================
+/// @file upgrade.proto
+/// @brief Software Upgrade gRPC interface
+/// @author Tor Slettnes <tor@slett.net>
+//==============================================================================
+
+syntax = "proto3";
+
+package cc.platform.upgrade.grpc;
+
+import "google/protobuf/empty.proto";
+import "cc/protobuf/signal/signal.proto";
+import "cc/platform/upgrade/protobuf/upgrade.proto";
+
+service Upgrade
+{
+    // Explicit scan for available upgrade packages in the specified location
+    // if provided, otherwise in the preconfigured/default locations.
+    //
+    // To observe scan progress, use the `Watch()` streaming call
+    // to monitor the `scan_progress` signal, below.
+    //
+    // Once the scan completes a list of package packages discovered in this
+    // location is returned.  Additionally, a `upgrade_available` signal may be
+    // emitted if the "best available" package is changed as a result of this
+    // scan (either because a new package is discovered or because a previous
+    // "best candidate" from this scanned location is no longer available).
+    //
+    // This call is not required for ongoing upgrade availability notifications.
+    // By default, removable devices (e.g. USB drives) are scanned on insertion,
+    // and online checks are performed at regular intervals if an Internet
+    // connection is available.
+    rpc Scan (upgrade.protobuf.PackageSource)
+        returns (upgrade.protobuf.PackageCatalogue);
+
+    // List available package sources (indexes), whether or not they contain
+    // applicable packages.
+    rpc ListSources (google.protobuf.Empty)
+        returns (upgrade.protobuf.PackageSources);
+
+    // Return information about available upgrade packages discovered during
+    // a prior (implicit or explicit) scan of the specified package source
+    // if specified, otherwise across all preconfigured/default sources.
+    rpc ListAvailable (upgrade.protobuf.PackageSource)
+        returns (upgrade.protobuf.PackageCatalogue);
+
+    // Return information about the best available upgrade package discovered
+    // during a prior scan of the specified package source if specified,
+    // otherwise the best overall candidate discovered across all
+    // preconfigured/default locations. This will normally be the package with
+    // the highest version number, with local (VFS) sources preferered over
+    // remote (URL).
+    //
+    // This information is also available by watching the signal
+    // `upgrade_available`, below.
+    rpc BestAvailable (upgrade.protobuf.PackageSource)
+        returns (upgrade.protobuf.PackageInfo);
+
+    // Install an upgrade from the specified package source if provided,
+    // otherwise the current "best" package source based on prior scans.
+    // To perform an explicit scan, invoke `scan()` before `install()`.
+    //
+    // This call returns immediately with information about the package being
+    // installed. To monitor the upgrade progress and result use the `Watch()`
+    // method below.
+    rpc Install (upgrade.protobuf.InstallRequest)
+        returns (upgrade.protobuf.PackageInfo);
+
+    // Finalize a completed upgrade. This clears the `upgrade_progress`
+    // signal, and if the upgrade requires a system reboot, do so now.
+    rpc Finalize (google.protobuf.Empty)
+        returns (google.protobuf.Empty);
+
+    // Listen for event updates from server.
+    //
+    // The input is a filter mask indicating which event types to monitor,
+    // indicated by their respective field numbers in the `Signal` message,
+    // below. By default, all events are streamed back.
+    //
+    // The output is a stream of `Signal` messages, each containing exactly
+    // one event as described below.
+    rpc Watch (cc.protobuf.signal.Filter)
+        returns (stream upgrade.protobuf.Signal);
+}

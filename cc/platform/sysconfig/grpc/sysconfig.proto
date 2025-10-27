@@ -1,0 +1,129 @@
+// -*- Protocol-Buffers -*-
+//==============================================================================
+/// @file sysconfig.proto
+/// @brief SysConfig gRPC service interface
+/// @author Tor Slettnes <tor@slett.net>
+//==============================================================================
+
+syntax = "proto3";
+
+package cc.platform.sysconfig.grpc;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "cc/protobuf/signal/signal.proto";
+import "cc/platform/sysconfig/protobuf/sysconfig.proto";
+
+service SysConfig
+{
+    //--------------------------------------------------------------------------
+    // Product information
+
+    rpc GetProductInfo (google.protobuf.Empty)
+        returns (sysconfig.protobuf.ProductInfo);
+
+    rpc SetSerialNumber (google.protobuf.StringValue)
+        returns (google.protobuf.Empty);
+
+    rpc SetModelName (google.protobuf.StringValue)
+        returns (google.protobuf.Empty);
+
+    //--------------------------------------------------------------------------
+    // Host Information
+
+    rpc GetHostInfo (google.protobuf.Empty)
+        returns (sysconfig.protobuf.HostInfo);
+
+    rpc SetHostName (google.protobuf.StringValue)
+        returns (google.protobuf.Empty);
+
+    //--------------------------------------------------------------------------
+    // Time configuration
+
+    // Current timestamp
+    rpc SetCurrentTime (google.protobuf.Timestamp)
+        returns (google.protobuf.Empty);
+
+    rpc GetCurrentTime (google.protobuf.Empty)
+        returns (google.protobuf.Timestamp);
+
+    // Get or set time configuration
+    rpc SetTimeConfig (sysconfig.protobuf.TimeConfig)
+        returns (google.protobuf.Empty);
+
+    rpc GetTimeConfig (google.protobuf.Empty)
+        returns (sysconfig.protobuf.TimeConfig);
+
+    //--------------------------------------------------------------------------
+    // Time zone configuration
+
+    // List time zone _areas_, which are continents or oceans. Results are
+    // sorted roughly with a west to east then north to south bias.
+    rpc ListTimezoneAreas (google.protobuf.Empty)
+        returns (sysconfig.protobuf.TimeZoneAreas);
+
+    // List countries, optionally within a specific area.
+    // Results are sorted alphabetically, except that within "Americas"
+    // the North American countries (US, Canada, Mexico) appear first
+    // in that order (coincidentally, by their westernmost points).
+    rpc ListTimezoneCountries (sysconfig.protobuf.TimeZoneArea)
+        returns (sysconfig.protobuf.TimeZoneCountries);
+
+    // List regions within a specified country, optionally also limited by area.
+    // Results are sorted alphabetically, except that within the US the four
+    // major timezone regions (Eastern, Central, Mountain, Pacific) appear in
+    // that order.
+    //
+    // If there are no subregions within the specified country, return an empty
+    // response.
+    rpc ListTimezoneRegions (sysconfig.protobuf.TimeZoneLocationFilter)
+        returns (sysconfig.protobuf.TimeZoneRegions);
+
+    // Obtain canonical time zone specifications, optionally restricted by a
+    // specific area and/or country.
+    rpc ListTimezoneSpecs (sysconfig.protobuf.TimeZoneLocationFilter)
+        returns (sysconfig.protobuf.TimeZoneCanonicalSpecs);
+
+    /// Return geographic information about a specific canonical timezone. If no
+    /// zone name is specified, return info about the currently configured zone.
+    rpc GetTimezoneSpec (sysconfig.protobuf.TimeZoneCanonicalName)
+        returns (sysconfig.protobuf.TimeZoneCanonicalSpec);
+
+    /// Get offset information about the specified time zone at the specified
+    /// time, or the currently configured zone and/or system time if not
+    /// specified. Information includes current and
+    /// standard time offsets from UTC, and whether Daylight Savings Time (or
+    /// Summer Time) is currently in effect.
+    rpc GetTimezoneInfo (sysconfig.protobuf.TimeZoneInfoRequest)
+        returns (sysconfig.protobuf.TimeZoneInfo);
+
+    /// Configure the system time zone. Return the resulting applied zone
+    /// information.
+    rpc SetTimezone (sysconfig.protobuf.TimeZoneConfig)
+        returns (sysconfig.protobuf.TimeZoneInfo);
+
+    //--------------------------------------------------------------------------
+    // Spawn a new process, with or without capturing stdin/stdout/stderr.
+
+    rpc InvokeSync (sysconfig.protobuf.CommandInvocation)
+        returns (sysconfig.protobuf.CommandResponse);
+
+    rpc InvokeAsync (sysconfig.protobuf.CommandInvocation)
+        returns (sysconfig.protobuf.CommandInvocationResponse);
+
+    rpc InvokeFinish (sysconfig.protobuf.CommandContinuation)
+        returns (sysconfig.protobuf.CommandResponse);
+
+    // rpc invoke_piped (stream CommandInvocation)
+    //     returns (stream CommandResponse);
+
+    rpc Reboot (google.protobuf.Empty)
+        returns (google.protobuf.Empty);
+
+    //--------------------------------------------------------------------------
+    // Watch for changes from server
+
+    rpc Watch (cc.protobuf.signal.Filter)
+        returns (stream sysconfig.protobuf.Signal);
+}

@@ -1,0 +1,112 @@
+// -*- Protocol-Buffers -*-
+//==============================================================================
+/// @file vfs.proto
+/// @brief Virtual Filesystem  gRPC/ProtoBuf interface
+/// @author Tor Slettnes <tor@slett.net>
+//==============================================================================
+
+syntax = "proto3";
+
+package cc.platform.vfs.grpc;
+
+import "google/protobuf/empty.proto";
+import "cc/protobuf/signal/signal.proto";
+import "cc/protobuf/variant/variant.proto";
+import "cc/platform/vfs/protobuf/vfs.proto";
+
+service VirtualFileSystem
+{
+    // List known virtual filesystem contexts.
+    rpc GetContexts (google.protobuf.Empty)
+        returns (vfs.protobuf.ContextMap);
+
+    // List open virtual filesystem contexts.
+    rpc GetOpenContexts (google.protobuf.Empty)
+        returns (vfs.protobuf.ContextMap);
+
+    // List known virtual filesystem contexts.
+    rpc GetContextSpec (vfs.protobuf.Path)
+        returns (vfs.protobuf.ContextSpec);
+
+    // Explicitly open a virtual context. Internally this increments a reference
+    // counter to keep the corresponding virtual filesystem context (VFC) open.
+    // For instance, in the case of a removable or remote drive the drive will
+    // remain mounted, thereby eliminating overhead associated with
+    // mounting/unmounting for individual file transactions.
+    //
+    // Once access is no longer needed The client should invoke
+    // `close_context()', thereby allowing the context to be closed.
+    rpc OpenContext (vfs.protobuf.Path)
+        returns (vfs.protobuf.ContextSpec);
+
+    // Close a previously-opened virtual context. Internally, this decrements a
+    // reference counter associated with the underlying filesystem context, and
+    // closes the context (e.g. unmounts) if it reaches zero.
+    rpc CloseContext (vfs.protobuf.Path)
+        returns (google.protobuf.Empty);
+
+    // Return information about the mounted filesystem containing the specified `path`.
+    rpc GetVolumeInfo (vfs.protobuf.PathRequest)
+        returns (vfs.protobuf.VolumeInfo);
+
+    // Return information about the specified `path`.
+    // Unlike `list_folder()` this does not descend if the path is a folder,
+    // but rather returns the status of the folder itself.
+    rpc GetFileInfo (vfs.protobuf.PathRequest)
+        returns (vfs.protobuf.FileInfo);
+
+    // List contents of the specified path (context/folder).
+    rpc GetDirectory (vfs.protobuf.PathRequest)
+        returns (vfs.protobuf.Directory);
+
+    /// Recursively locate files matching specific filename and/or attribute patterns.
+    rpc Locate (vfs.protobuf.LocateRequest)
+        returns (vfs.protobuf.Directory);
+
+    // Copy `sources` to `path`.
+    // If multiple sources are specified, `inside_target` must be set to
+    // indicate that the target `path` represents a folder.
+    rpc Copy (vfs.protobuf.PathRequest)
+        returns (google.protobuf.Empty);
+
+    // Move `sources` to `target`.
+    // If multiple sources are specified, `inside_target` must be set to
+    // indicate that the target `path` represents a folder.
+    rpc Move (vfs.protobuf.PathRequest)
+        returns (google.protobuf.Empty);
+
+    // Create a folder
+    rpc CreateFolder (vfs.protobuf.PathRequest)
+        returns (google.protobuf.Empty);
+
+    // Delete a file or folder as specified by `path`,
+    // or multiple files and/or folders specified as `sources`.
+    rpc Remove (vfs.protobuf.PathRequest)
+        returns (google.protobuf.Empty);
+
+    // Read the specified file, and stream its contents in chunks.
+    rpc ReadFile (vfs.protobuf.Path)
+        returns (stream vfs.protobuf.FileChunk);
+
+    // Write to a file in chunks. The path must be specified with the first chunk.
+    rpc WriteFile (stream vfs.protobuf.FileChunk)
+        returns (google.protobuf.Empty);
+
+    // Return attributes associated with the specified path.
+    rpc GetAttributes (vfs.protobuf.Path)
+        returns (cc.protobuf.variant.KeyValueMap);
+
+    // Set/update attributes associated with the specified path.
+    rpc SetAttributes (vfs.protobuf.AttributeRequest)
+        returns (google.protobuf.Empty);
+
+    // Clear all attributes associated with the specified path.
+    rpc ClearAttributes (vfs.protobuf.Path)
+        returns (google.protobuf.Empty);
+
+    //========================================================================
+    // Watch for changes
+    rpc Watch (cc.protobuf.signal.Filter)
+        returns (stream vfs.protobuf.Signal);
+}
+

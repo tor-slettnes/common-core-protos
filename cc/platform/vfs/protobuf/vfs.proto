@@ -1,95 +1,17 @@
 // -*- Protocol-Buffers -*-
 //==============================================================================
 /// @file vfs.proto
-/// @brief Virtual Filesystem  gRPC/ProtoBuf interface
+/// @brief Virtual Filesystem ProtoBuf data types
 /// @author Tor Slettnes <tor@slett.net>
 //==============================================================================
 
 syntax = "proto3";
 
-package cc.platform.vfs;
+package cc.platform.vfs.protobuf;
 
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "cc/protobuf/signal/signal.proto";
 import "cc/protobuf/variant/variant.proto";
-
-service VirtualFileSystem
-{
-    // List known virtual filesystem contexts.
-    rpc GetContexts (google.protobuf.Empty) returns (ContextMap);
-
-    // List open virtual filesystem contexts.
-    rpc GetOpenContexts (google.protobuf.Empty) returns (ContextMap);
-
-    // List known virtual filesystem contexts.
-    rpc GetContextSpec (Path) returns (ContextSpec);
-
-    // Explicitly open a virtual context. Internally this increments a reference
-    // counter to keep the corresponding virtual filesystem context (VFC) open.
-    // For instance, in the case of a removable or remote drive the drive will
-    // remain mounted, thereby eliminating overhead associated with
-    // mounting/unmounting for individual file transactions.
-    //
-    // Once access is no longer needed The client should invoke
-    // `close_context()', thereby allowing the context to be closed.
-    rpc OpenContext (Path) returns (ContextSpec);
-
-    // Close a previously-opened virtual context. Internally, this decrements a
-    // reference counter associated with the underlying filesystem context, and
-    // closes the context (e.g. unmounts) if it reaches zero.
-    rpc CloseContext (Path) returns (google.protobuf.Empty);
-
-    // Return information about the mounted filesystem containing the specified `path`.
-    rpc GetVolumeInfo (PathRequest) returns (VolumeInfo);
-
-    // Return information about the specified `path`.
-    // Unlike `list_folder()` this does not descend if the path is a folder,
-    // but rather returns the status of the folder itself.
-    rpc GetFileInfo (PathRequest) returns (FileInfo);
-
-    // List contents of the specified path (context/folder).
-    rpc GetDirectory (PathRequest) returns (Directory);
-
-    /// Recursively locate files matching specific filename and/or attribute patterns.
-    rpc Locate (LocateRequest) returns (Directory);
-
-    // Copy `sources` to `path`.
-    // If multiple sources are specified, `inside_target` must be set to
-    // indicate that the target `path` represents a folder.
-    rpc Copy (PathRequest) returns (google.protobuf.Empty);
-
-    // Move `sources` to `target`.
-    // If multiple sources are specified, `inside_target` must be set to
-    // indicate that the target `path` represents a folder.
-    rpc Move (PathRequest) returns (google.protobuf.Empty);
-
-    // Create a folder
-    rpc CreateFolder (PathRequest) returns (google.protobuf.Empty);
-
-    // Delete a file or folder as specified by `path`,
-    // or multiple files and/or folders specified as `sources`.
-    rpc Remove (PathRequest) returns (google.protobuf.Empty);
-
-    // Read the specified file, and stream its contents in chunks.
-    rpc ReadFile (Path) returns (stream FileChunk);
-
-    // Write to a file in chunks. The path must be specified with the first chunk.
-    rpc WriteFile (stream FileChunk) returns (google.protobuf.Empty);
-
-    // Return attributes associated with the specified path.
-    rpc GetAttributes (Path) returns (cc.protobuf.variant.KeyValueMap);
-
-    // Set/update attributes associated with the specified path.
-    rpc SetAttributes (AttributeRequest) returns (google.protobuf.Empty);
-
-    // Clear all attributes associated with the specified path.
-    rpc ClearAttributes (Path) returns (google.protobuf.Empty);
-
-    //========================================================================
-    // Watch for changes
-    rpc Watch (cc.protobuf.signal.Filter) returns (stream Signal);
-}
 
 
 enum PathType
