@@ -12,7 +12,7 @@ package cc.platform.vfs.grpc;
 import "google/protobuf/empty.proto";
 import "cc/protobuf/signal/signal.proto";
 import "cc/protobuf/variant/variant.proto";
-import "cc/platform/vfs/protobuf/vfs.proto";
+import "cc/platform/vfs/protobuf/vfs_types.proto";
 
 service VirtualFileSystem
 {

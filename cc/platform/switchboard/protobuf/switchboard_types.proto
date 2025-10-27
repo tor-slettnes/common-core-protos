@@ -7,7 +7,7 @@
 
 syntax = "proto3";
 
-package cc.switchboard.protobuf;
+package cc.platform.switchboard.protobuf;
 
 import "cc/protobuf/status/status.proto";
 import "cc/protobuf/variant/variant.proto";

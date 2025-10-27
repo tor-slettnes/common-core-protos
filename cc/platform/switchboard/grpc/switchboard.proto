@@ -7,12 +7,12 @@
 
 syntax = "proto3";
 
-package cc.switchboard.grpc;
+package cc.platform.switchboard.grpc;
 
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "cc/protobuf/signal/signal.proto";
-import "cc/switchboard/protobuf/switchboard.proto";
+import "cc/platform/switchboard/protobuf/switchboard_types.proto";
 
 
 //==============================================================================

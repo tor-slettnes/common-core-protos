@@ -13,7 +13,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "cc/protobuf/signal/signal.proto";
-import "cc/platform/sysconfig/protobuf/sysconfig.proto";
+import "cc/platform/sysconfig/protobuf/sysconfig_types.proto";
 
 service SysConfig
 {

@@ -11,7 +11,7 @@ package cc.platform.upgrade.grpc;
 
 import "google/protobuf/empty.proto";
 import "cc/protobuf/signal/signal.proto";
-import "cc/platform/upgrade/protobuf/upgrade.proto";
+import "cc/platform/upgrade/protobuf/upgrade_types.proto";
 
 service Upgrade
 {

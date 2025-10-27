@@ -10,7 +10,7 @@ syntax = "proto3";
 package cc.platform.multilogger.grpc;
 
 import "google/protobuf/empty.proto";
-import "cc/platform/multilogger/protobuf/multilogger.proto";
+import "cc/platform/multilogger/protobuf/multilogger_types.proto";
 
 service MultiLogger
 {

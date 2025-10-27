@@ -12,7 +12,7 @@ package cc.platform.netconfig.grpc;
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "cc/protobuf/signal/signal.proto";
-import "cc/platform/netconfig/protobuf/netconfig.proto";
+import "cc/platform/netconfig/protobuf/netconfig_types.proto";
 
 service NetConfig
 {

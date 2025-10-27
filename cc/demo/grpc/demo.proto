@@ -11,7 +11,7 @@ package cc.demo.grpc;
 
 import "google/protobuf/empty.proto";
 import "cc/protobuf/signal/signal.proto";
-import "cc/demo/protobuf/demo.proto";
+import "cc/demo/protobuf/demo_types.proto";
 
 //==============================================================================
 // Service
@@ -19,12 +19,12 @@ import "cc/demo/protobuf/demo.proto";
 // Simple service to showcase command/response and event propagation
 service Demo {
     // Send a greeting to other listeners
-    rpc SayHello (demo.protobuf.Greeting)
+    rpc SayHello (cc.demo.protobuf.Greeting)
         returns (google.protobuf.Empty);
 
     // Get the current time
     rpc GetCurrentTime (google.protobuf.Empty)
-        returns (demo.protobuf.TimeData);
+        returns (cc.demo.protobuf.TimeData);
 
     // Start streaing time updates at regular intervals
     rpc StartTicking (google.protobuf.Empty)
@@ -36,5 +36,5 @@ service Demo {
 
     // Stream signals from the server
     rpc Watch (cc.protobuf.signal.Filter)
-        returns (stream demo.protobuf.Signal);
+        returns (stream cc.demo.protobuf.Signal);
 }
