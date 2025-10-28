@@ -1,64 +1,18 @@
 // -*- Protocol-Buffers -*-
 //==============================================================================
-/// @file logging.proto
-/// @brief Logging interface
+/// @file multilogger.proto
+/// @brief MultiLogger data types
 /// @author Tor Slettnes <tor@slett.net>
 //==============================================================================
 
 syntax = "proto3";
 
-package cc.platform.multilogger;
+package cc.platform.multilogger.protobuf;
 
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "cc/protobuf/status/status.proto";
 import "cc/protobuf/datetime/datetime.proto";
 import "cc/protobuf/variant/variant.proto";
-
-service MultiLogger
-{
-    // Log a single message.
-    rpc Submit (Loggable) returns (google.protobuf.Empty);
-
-    // Open a writable stream for continuous logging
-    rpc Writer (stream Loggable) returns (google.protobuf.Empty);
-
-    // Open a readable stream for continuous monitoring.  A new log sink is
-    // created on the server side to capture events on behalf of the client.
-    rpc Listen (ListenerSpec) returns (stream Loggable);
-
-    // Add a new log sink to capture events meeting the specified criteria.
-    rpc AddSink (SinkSpec) returns (AddSinkResult);
-
-    // Delete an existing data contract.  This may remove corresponding log
-    // sinks.
-    rpc RemoveSink (SinkID) returns (RemoveSinkResult);
-
-    // Return definition for a single log sink
-    rpc GetSink (SinkID) returns (SinkSpec);
-
-    // Return defintions for all available log sinks
-    rpc GetAllSinks (google.protobuf.Empty) returns (SinkSpecs);
-
-    // Return defintions for all available log sinks
-    rpc ListSinks (google.protobuf.Empty) returns (SinkNames);
-
-    // Return defintions for all available log sinks
-    rpc ListSinkTypes (google.protobuf.Empty) returns (SinkTypes);
-
-    // Return a list of keys corresponding to fields log messages, more or less
-    // the static field names from `Message`, below.  These can be included as
-    // `contract_fields` when adding a CSV or DB sink with contract id
-    // `text`.
-    rpc ListMessageFields (google.protobuf.Empty) returns (FieldNames);
-
-    // Return a list of keys corresponding to fields in logged errors, more or
-    // less the static field names from `cc.protobuf.status.Error`. These can be included
-    // as `contract_fields` when adding a CSV or DB sink with contract id
-    // `error`.
-    rpc ListErrorFields (google.protobuf.Empty) returns (FieldNames);
-
-}
 
 //==============================================================================
 // Loggable items

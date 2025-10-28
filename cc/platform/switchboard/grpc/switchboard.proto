@@ -1,0 +1,145 @@
+// -*- protocol-buffers -*-
+//==============================================================================
+/// @file switchboard.proto
+/// @brief Switchboard gRPC service interface
+/// @author Tor Slettnes <tor@slett.net>
+//==============================================================================
+
+syntax = "proto3";
+
+package cc.platform.switchboard.grpc;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "cc/protobuf/signal/signal.proto";
+import "cc/platform/switchboard/protobuf/switchboard_types.proto";
+
+
+//==============================================================================
+// gRPC service interface
+
+service Switchboard
+{
+    // List all switches including specifications and statuses
+    rpc GetSwitches (google.protobuf.Empty)
+        returns (switchboard.protobuf.SwitchMap);
+
+    // Get information about a single switch
+    rpc GetSwitch (switchboard.protobuf.SwitchIdentifier)
+        returns (switchboard.protobuf.SwitchInfo);
+
+    // Add a new switch.
+    // Returns true if the switch was added, false if it already existed.
+    rpc AddSwitch (switchboard.protobuf.AddSwitchRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Remove an existing switch.
+    // Returns true if the switch was removed, false if it did not exist.
+    rpc RemoveSwitch (switchboard.protobuf.RemoveSwitchRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Update the specification of a switch.
+    rpc SetSpecification (switchboard.protobuf.SetSpecificationRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Get specifications for the specified switches.
+    // If no identifiers are provided, get specificaitons for all switches.
+    rpc GetSpecifications (switchboard.protobuf.SwitchIdentifiers)
+        returns (switchboard.protobuf.SpecificationMap);
+
+    // Add a new upstream dependency (direct ancestor) to a given switch.
+    // Returns a boolean indicating that this is a newly added dependency.
+    rpc AddDependency (switchboard.protobuf.AddDependencyRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Remove an existing dependency (direct ancestor) from a given switch.
+    // Returns a boolean indicating that the dependency did exist and was removed.
+    rpc RemoveDependency (switchboard.protobuf.RemoveDependencyRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Return a list of dependencies for a given switch.
+    rpc GetDependencies (switchboard.protobuf.SwitchIdentifier)
+        returns (switchboard.protobuf.DependencyMap);
+
+    // Return a list of (direct and indirect) ancestors for a given switch,
+    // i.e. other switches on whose state it depends.
+    rpc GetAncestors (switchboard.protobuf.SwitchIdentifier)
+        returns (switchboard.protobuf.SwitchIdentifiers);
+
+    // Return a list of (direct and indirect) descendents for a given switch,
+    // i.e. other switches whose states are affected by this switch.
+    rpc GetDescendents (switchboard.protobuf.SwitchIdentifier)
+        returns (switchboard.protobuf.SwitchIdentifiers);
+
+    // Add an interceptor, i.e., a callback handler in the client that will be
+    // invoked when the specified switch changes its current state. The client
+    // is expected to use the `intercept()` call to stream back such callback
+    // requests, and to respond back to the server once the callback has
+    // completed.
+    // After changing its state, a switch will normally wait for all associated
+    // interceptors to complete before undergoing any further state transitions.
+    // Returns a boolean indicating whether the interceptor was added.
+    rpc AddInterceptor (switchboard.protobuf.AddInterceptorRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Remove an existing interceptor.
+    // Return a boolean indicating whether the interceptor existed and was removed.
+    rpc RemoveInterceptor (switchboard.protobuf.RemoveInterceptorRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Get a list of interceptors associated with the specified switch.
+    // Note that this also includes interceptors owned by other clients.
+    rpc GetInterceptors (switchboard.protobuf.SwitchIdentifier)
+        returns (switchboard.protobuf.InterceptorMap);
+
+    // Manually invoke a specific interceptor, as if it were triggered by
+    // a switch changing its current state.  Primarily a diagnostic tool.
+    rpc InvokeInterceptor (switchboard.protobuf.InterceptorInvocation)
+        returns (switchboard.protobuf.InterceptorResult);
+
+    // Register a handler for interceptor requests from the server.
+    // This is a prerequistie for the `add_interceptor()` call.
+    rpc Intercept (stream switchboard.protobuf.InterceptorResult)
+        returns (stream switchboard.protobuf.InterceptorInvocation);
+
+    // Change the state of a switch, either to an explicit target state
+    // or to a target state inferred based on its dependencies.
+    // Returns true if the a state change is triggered, false if not.
+    // In the latter case, use `get_culprits()` to determine the cause.
+    // The return value indicates whether the switch transition takes place
+    // (i.e. the target state changed, or the `reevaluate` flag is set).
+    rpc SetTarget (switchboard.protobuf.SetTargetRequest)
+        returns (switchboard.protobuf.SetTargetResponse);
+
+    // Assign arbitrary key/value pairs on the specified switch, optionally
+    // clearing any existing attributes. The update takes place immediately
+    // even if a state change is in progress; however will be cleared again
+    // upon completion of such state change request if its
+    // `clear_existing_attributes` flag was set.
+    rpc SetAttributes (switchboard.protobuf.SetAttributesRequest)
+        returns (switchboard.protobuf.SetAttributesResponse);
+
+    // Get current status for the specified switches.
+    // If no identifiers are provided, get status of all switches.
+    rpc GetStatuses (switchboard.protobuf.SwitchIdentifiers)
+        returns (switchboard.protobuf.StatusMap);
+
+    // Obtain cuplrits indicating why a given switch is currently not set.
+    // Returns a map of upstream switches (direct or indirect ancestors)
+    // whose current values are in conflict with this switch.
+    rpc GetCulprits (switchboard.protobuf.CulpritsQuery)
+        returns (switchboard.protobuf.StatusMap);
+
+    // Obtain a map of any errors associated with the specified switch and its
+    // ancestors that cause its state to be STATE_FAILED.
+    rpc GetErrors (switchboard.protobuf.SwitchIdentifier)
+        returns (switchboard.protobuf.ErrorMap);
+
+    // Watch for signals from the server.  Upon invocation, a pair of signals is
+    // stremed back for each global switch, containing its current specification
+    // and status, respectively. Subsequent updates occur whenever there is a
+    // change, also if triggered from this client.
+    rpc Watch (cc.protobuf.signal.Filter)
+        returns (stream switchboard.protobuf.Signal);
+}
+

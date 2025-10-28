@@ -1,0 +1,73 @@
+// -*- Protocol-Buffers -*-
+//==============================================================================
+/// @file netconfig.proto
+/// @brief NetConfig gRPC interface
+/// @author Tor Slettnes <tor@slett.net>
+//==============================================================================
+
+syntax = "proto3";
+
+package cc.platform.netconfig.grpc;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "cc/protobuf/signal/signal.proto";
+import "cc/platform/netconfig/protobuf/netconfig_types.proto";
+
+service NetConfig
+{
+    rpc GetHostName (google.protobuf.Empty)
+        returns (google.protobuf.StringValue);
+
+    rpc SetHostName (google.protobuf.StringValue)
+        returns (google.protobuf.Empty);
+
+    rpc GetConnections (google.protobuf.Empty)
+        returns (netconfig.protobuf.ConnectionMap);
+
+    rpc DefineConnection (netconfig.protobuf.ConnectionRequest)
+        returns (google.protobuf.Empty);
+
+    rpc RemoveConnection (netconfig.protobuf.MappingKey)
+        returns (google.protobuf.BoolValue);
+
+    rpc ActivateConnection (netconfig.protobuf.MappingKey)
+        returns (google.protobuf.Empty);
+
+    rpc DeactivateConnection (netconfig.protobuf.MappingKey)
+        returns (google.protobuf.Empty);
+
+    rpc GetActiveConnections (google.protobuf.Empty)
+        returns (netconfig.protobuf.ActiveConnectionMap);
+
+    rpc RequestScan (google.protobuf.Empty)
+        returns (google.protobuf.Empty);
+
+    rpc GetAccessPoints (google.protobuf.Empty)
+        returns (netconfig.protobuf.AccessPointMap);
+
+    // Deprecated; use `DefineConnection()` instead.
+    rpc ConnectAccessPoint (netconfig.protobuf.WirelessConnectionRequest)
+        returns (google.protobuf.Empty);
+
+    rpc GetDevices (google.protobuf.Empty)
+        returns (netconfig.protobuf.DeviceMap);
+
+    rpc GetGlobalData (google.protobuf.Empty)
+        returns (netconfig.protobuf.GlobalData);
+
+    rpc SetWirelessEnabled (netconfig.protobuf.RadioState)
+        returns (google.protobuf.Empty);
+
+    rpc SetWirelessAllowed (google.protobuf.BoolValue)
+        returns (google.protobuf.Empty);
+
+    rpc SelectWirelessBand (netconfig.protobuf.WirelessBandSetting)
+        returns (google.protobuf.Empty);
+
+    //========================================================================
+    // Watch for changes
+
+    rpc Watch (cc.protobuf.signal.Filter)
+        returns (stream netconfig.protobuf.Signal);
+}
