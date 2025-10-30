@@ -1,0 +1,33 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/bufbuild/buf-examples/gen
+plugins:
+  # Built-in protoc plugin for C++
+  - protoc_builtin: cpp
+    protoc_path: /usr/bin/protoc
+    out: gen/cpp
+  # Built-in protoc plugin for Java
+  - protoc_builtin: java
+    protoc_path: /usr/bin/protoc
+    out: gen/java
+  # Go
+  - remote: buf.build/protocolbuffers/go
+    out: gen/go
+    opt: paths=source_relative
+  # Python (ProtoBuf)
+  - remote: buf.build/protocolbuffers/python
+    out: gen/python
+  # Python (gRPC)
+  - remote: buf.build/grpc/python:v1.76.0
+    out: gen/python
+  # Rust
+  - remote: buf.build/community/neoeinstein-prost
+    out: gen/rust
+  # TypeScript
+  - remote: buf.build/bufbuild/es:v2.10.0
+    out: gen/ts
+inputs:
+  - directory: .
