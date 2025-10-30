@@ -32,8 +32,8 @@ message Scalar
     //  * 2   -> hundreds (hecto)
     //  * 3   -> thousands (kilo)
     //  * 6   -> millions (mega)
-    //  * 9   -> US (short form) billions; intl (long form) milliards
-    //  * 12  -> US (short form) trillions; intl (long form) billons
+    //  * 9   -> US/short form billions; intl/long form milliards (giga)
+    //  * 12  -> US/short form trillions; intl/long form billions (terra)
     int32 decimal_exponent = 3;
 }
 
