@@ -76,19 +76,20 @@ message ScanProgress
     PackageSource source = 1;
 }
 
+enum UpgradeState
+{
+    UPGRADE_STATE_NONE        = 0;
+    UPGRADE_STATE_DOWNLOADING = 1;
+    UPGRADE_STATE_UNPACKING   = 2;
+    UPGRADE_STATE_INSTALLING  = 3;
+    UPGRADE_STATE_COMPLETED   = 4;
+    UPGRADE_STATE_FAILED      = 5;
+    UPGRADE_STATE_FINALIZED   = 9;
+};
+
+
 message UpgradeProgress
 {
-    enum UpgradeState
-    {
-        STATE_NONE = 0;
-        STATE_DOWNLOADING = 1;
-        STATE_UNPACKING = 2;
-        STATE_INSTALLING = 3;
-        STATE_COMPLETED = 4;
-        STATE_FAILED = 5;
-        STATE_FINALIZED = 9;
-    };
-
     message ProgressFraction
     {
         uint32 current = 1;
