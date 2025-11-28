@@ -52,12 +52,13 @@ message Distance
 
 enum DistanceUnit
 {
-    DISTANCE_METERS     = 0;    // SI Base unit
-    DISTANCE_INCHES     = 1;    // Imperial, 0.0254m
-    DISTANCE_FEET       = 2;    // 12 inches
-    DISTANCE_YARDS      = 3;    // 3 feet
-    DISTANCE_MILES      = 4;    // 1760 yards
-    DISTANCE_LIGHTYEARS = 5;    // Approx. 9.4607e+15 meters
+    DISTANCE_UNDEFINED  = 0;    // No unit assigned
+    DISTANCE_METERS     = 1;    // SI Base unit
+    DISTANCE_INCHES     = 2;    // Imperial, 0.0254m
+    DISTANCE_FEET       = 3;    // 12 inches
+    DISTANCE_YARDS      = 4;    // 3 feet
+    DISTANCE_MILES      = 5;    // 1760 yards
+    DISTANCE_LIGHTYEARS = 6;    // Approx. 9.4607e+15 meters
 }
 
 //------------------------------------------------------------------------------
@@ -92,9 +93,10 @@ message Angle
 
 enum AngleUnit
 {
-    ANGLE_RADIANS = 0;          // Full circle = 2*pi
-    ANGLE_DEGREES = 1;          // Full circle = 360°
-    ANGLE_GRADIANS = 2;         // Full circle = 400 grad.
+    ANGLE_UNDEFINED = 0;        // No unit assigned
+    ANGLE_RADIANS = 1;          // Full circle = 2*pi
+    ANGLE_DEGREES = 2;          // Full circle = 360°
+    ANGLE_GRADIANS = 3;         // Full circle = 400 grad.
 }
 
 
