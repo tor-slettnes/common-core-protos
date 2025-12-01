@@ -26,11 +26,20 @@ message SwitchIdentifiers
     repeated string switch_names = 1;
 }
 
+message GetSwitchesRequest
+{
+}
 
 message AddSwitchRequest
 {
     // Switch name to add
     string switch_name = 1;
+}
+
+message AddSwitchResponse
+{
+    // Whether or not the switch was just added.
+    bool added = 1;
 }
 
 message RemoveSwitchRequest
@@ -40,6 +49,12 @@ message RemoveSwitchRequest
 
     // Re-evaluate descendants after removal (default: true).
     optional bool propagate = 2;
+}
+
+message RemoveSwitchResponse
+{
+    // Whether or not the switch was just removed.
+    bool removed = 1;
 }
 
 
@@ -70,6 +85,11 @@ message SetSpecificationRequest
     optional bool update_state = 7;
 }
 
+message SetSpecificationResponse
+{
+    // Whether the speciifcation was updated.
+    bool updated = 1;
+}
 
 
 message SpecificationMap
@@ -143,6 +163,11 @@ message AddDependencyRequest
     optional bool reevaluate = 5;
 }
 
+message AddDependencyResponse
+{
+    bool added = 1;
+}
+
 message RemoveDependencyRequest
 {
     /// Downstream/successor switch, from which the dependency will be removed
@@ -153,6 +178,11 @@ message RemoveDependencyRequest
 
     /// Reevaluate switch state after dependency has been removed (default: true).
     optional bool reevaluate = 4;
+}
+
+message RemoveDependencyResponse
+{
+    bool removed = 1;
 }
 
 
@@ -221,6 +251,11 @@ message AddInterceptorRequest
     bool immediate = 7;
 }
 
+message AddInterceptorResponse
+{
+    bool added = 1;
+}
+
 
 message RemoveInterceptorRequest
 {
@@ -230,6 +265,12 @@ message RemoveInterceptorRequest
     // Interceptor name
     string interceptor_name = 2;
 }
+
+message RemoveInterceptorResponse
+{
+    bool removed = 1;
+}
+
 
 
 message InterceptorMap

@@ -20,7 +20,7 @@ import "cc/platform/switchboard/protobuf/switchboard_types.proto";
 service Switchboard
 {
     // List all switches including specifications and statuses
-    rpc GetSwitches (google.protobuf.Empty)
+    rpc GetSwitches (switchboard.protobuf.GetSwitchesRequest)
         returns (switchboard.protobuf.SwitchMap);
 
     // Get information about a single switch
@@ -30,16 +30,16 @@ service Switchboard
     // Add a new switch.
     // Returns true if the switch was added, false if it already existed.
     rpc AddSwitch (switchboard.protobuf.AddSwitchRequest)
-        returns (google.protobuf.BoolValue);
+        returns (switchboard.protobuf.AddSwitchResponse);
 
     // Remove an existing switch.
     // Returns true if the switch was removed, false if it did not exist.
     rpc RemoveSwitch (switchboard.protobuf.RemoveSwitchRequest)
-        returns (google.protobuf.BoolValue);
+        returns (switchboard.protobuf.RemoveSwitchResponse);
 
     // Update the specification of a switch.
     rpc SetSpecification (switchboard.protobuf.SetSpecificationRequest)
-        returns (google.protobuf.BoolValue);
+        returns (switchboard.protobuf.SetSpecificationResponse);
 
     // Get specifications for the specified switches.
     // If no identifiers are provided, get specificaitons for all switches.
@@ -49,12 +49,12 @@ service Switchboard
     // Add a new upstream dependency (direct ancestor) to a given switch.
     // Returns a boolean indicating that this is a newly added dependency.
     rpc AddDependency (switchboard.protobuf.AddDependencyRequest)
-        returns (google.protobuf.BoolValue);
+        returns (switchboard.protobuf.AddDependencyResponse);
 
     // Remove an existing dependency (direct ancestor) from a given switch.
     // Returns a boolean indicating that the dependency did exist and was removed.
     rpc RemoveDependency (switchboard.protobuf.RemoveDependencyRequest)
-        returns (google.protobuf.BoolValue);
+        returns (switchboard.protobuf..RemoveDependencyResponse);
 
     // Return a list of dependencies for a given switch.
     rpc GetDependencies (switchboard.protobuf.SwitchIdentifier)
@@ -79,12 +79,12 @@ service Switchboard
     // interceptors to complete before undergoing any further state transitions.
     // Returns a boolean indicating whether the interceptor was added.
     rpc AddInterceptor (switchboard.protobuf.AddInterceptorRequest)
-        returns (google.protobuf.BoolValue);
+        returns (switchboard.protobuf.AddInterceptorResponse);
 
     // Remove an existing interceptor.
     // Return a boolean indicating whether the interceptor existed and was removed.
     rpc RemoveInterceptor (switchboard.protobuf.RemoveInterceptorRequest)
-        returns (google.protobuf.BoolValue);
+        returns (switchboard.protobuf.RemoveInterceptorResponse);
 
     // Get a list of interceptors associated with the specified switch.
     // Note that this also includes interceptors owned by other clients.
