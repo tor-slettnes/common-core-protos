@@ -166,18 +166,18 @@ message Dependency
     // events).
     uint32 trigger_states = 3;
 
-    // Whether this is a normal/positive dependency, a
-    // negative/conflicting dependency, or the success switch simply
-    // toggles state in response to the ancestor's change.
+    // Whether this is a normal/positive dependency, a negative/conflicting
+    // dependency, or if the successor switch simply toggles its state in
+    // response to the ancestor's change.
     DependencyPolarity polarity = 8;
 
-    // Do not allow descendant to be manually enabled in case of dependency
-    // conflict.
+    // Prevent descendant from being manually enabled unless this dependency is
+    // satisfied.
     bool hard = 9;
 
     // Whether or not this dependency alone is sufficient to activate the
     // successor, irrespective of other dependencies. This implies a logical OR
-    // instead of AND conditition, and as a side effect, this dependency becomes
+    // instead of AND condition, and as a side effect, this dependency becomes
     // unnecessary if the successor's other dependencies are satisfied.
     bool sufficient = 10;
 }
@@ -194,9 +194,9 @@ message DependencyMap
 
 enum DependencyPolarity
 {
-    TOGGLE = 0;    // Successor toggles in response to predecessor change
-    POSITIVE = 1;  // Successor depends on predecessor being active
-    NEGATIVE = -1; // Inverse; successor depends on predecessor being inactive
+    POLARITY_TOGGLE = 0;    // Successor toggles in response to predecessor change
+    POLARITY_POSITIVE = 1;  // Successor depends on predecessor being active
+    POLARITY_NEGATIVE = -1; // Inverse; successor depends on predecessor being inactive
 };
 
 
@@ -244,7 +244,7 @@ message InterceptorSpec
     // Once that service is no longer available the interceptor is implicitly removed.
     string owner = 2;
 
-    // A bitmask represening states for which the interceptor is invoked.
+    // A bitmask representing states for which the interceptor is invoked.
     // Often just a single transitional state, i.e., `STATE_ACTIVATING`,
     // `STATE_DEACTIVATING` or `STATE_FAILING`.  Required.
     uint32 state_transitions = 4;
