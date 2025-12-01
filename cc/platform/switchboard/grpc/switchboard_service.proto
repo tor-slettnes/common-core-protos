@@ -65,9 +65,9 @@ service Switchboard
     rpc GetAncestors (switchboard.protobuf.SwitchIdentifier)
         returns (switchboard.protobuf.SwitchIdentifiers);
 
-    // Return a list of (direct and indirect) descendents for a given switch,
+    // Return a list of (direct and indirect) descendants for a given switch,
     // i.e. other switches whose states are affected by this switch.
-    rpc GetDescendents (switchboard.protobuf.SwitchIdentifier)
+    rpc GetDescendants (switchboard.protobuf.SwitchIdentifier)
         returns (switchboard.protobuf.SwitchIdentifiers);
 
     // Add an interceptor, i.e., a callback handler in the client that will be

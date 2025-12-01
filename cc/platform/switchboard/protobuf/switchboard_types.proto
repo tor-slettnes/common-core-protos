@@ -38,7 +38,7 @@ message RemoveSwitchRequest
     // Switch to remove
     string switch_name = 1;
 
-    // Re-evaluate descendents after removal (default: true).
+    // Re-evaluate descendants after removal (default: true).
     optional bool propagate = 2;
 }
 
@@ -350,7 +350,7 @@ message SetTargetRequest
     bool with_interceptors = 9;
 
     // Update successors after each state transition.
-    bool trigger_descendents = 10;
+    bool trigger_descendants = 10;
 
     // Make the state transition even if the switch is already in the
     // ddesired target state.
