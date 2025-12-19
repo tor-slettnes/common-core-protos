@@ -57,17 +57,20 @@ message SetSpecificationRequest
     // Set initial state to active. Default: Calculate from dependencies.
     optional bool active = 3;
 
-    // Clear existing localizations when updating
-    bool replace_localizations = 4;
-
-    // Clear existing dependencies when updating
-    bool replace_dependencies = 5;
-
-    // Clear existing interceptors when updating
-    bool replace_interceptors = 6;
-
     // Reevalulate state after change (default: true)
     optional bool update_state = 7;
+
+    // Clear existing aliases when updating.
+    bool replace_aliases = 8;
+
+    // Clear existing localizations when updating
+    bool replace_localizations = 9;
+
+    // Clear existing dependencies when updating
+    bool replace_dependencies = 10;
+
+    // Clear existing interceptors when updating
+    bool replace_interceptors = 11;
 }
 
 
@@ -79,6 +82,9 @@ message SpecificationMap
 
 message Specification
 {
+    // Additional names assigned to this switch.
+    repeated string aliases = 2;
+
     // Primary switch: Do not descend further when looking for culprits.
     // If not explcitly provided in an update request, current value prevails.
     optional bool is_primary = 3;
@@ -91,7 +97,6 @@ message Specification
 
     // Handlers to be invoked on state changes
     InterceptorMap interceptors = 6;
-
 }
 
 message LocalizationMap
