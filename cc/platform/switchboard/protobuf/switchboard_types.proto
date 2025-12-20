@@ -42,6 +42,15 @@ message RemoveSwitchRequest
     optional bool propagate = 2;
 }
 
+message ImportRequest
+{
+    cc.protobuf.variant.ValueList declarations = 4;
+}
+
+message ImportResponse
+{
+    uint64 import_count = 1;
+}
 
 //==============================================================================
 // Specification

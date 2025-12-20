@@ -37,6 +37,9 @@ service Switchboard
     rpc RemoveSwitch (switchboard.protobuf.RemoveSwitchRequest)
         returns (google.protobuf.BoolValue);
 
+    rpc ImportSwitches (switchboard.protobuf.ImportRequest)
+        returns (switchboard.protobuf.ImportResponse);
+
     // Update the specification of a switch.
     rpc SetSpecification (switchboard.protobuf.SetSpecificationRequest)
         returns (google.protobuf.BoolValue);
