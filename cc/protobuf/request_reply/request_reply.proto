@@ -3,7 +3,7 @@
 /// @file request_reply.proto
 /// @brief Envelope for Request/Reply messages over channels like ZMQ
 /// @note Not applicable with gRPC
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

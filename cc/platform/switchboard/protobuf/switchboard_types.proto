@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file switchboard.proto
 /// @brief Swithboard ProtoBuf data types
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

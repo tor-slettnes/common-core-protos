@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file status.proto
 /// @brief Status details pertaining to an exception or event.
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

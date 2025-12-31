@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file switchboard.proto
 /// @brief Switchboard gRPC service interface
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

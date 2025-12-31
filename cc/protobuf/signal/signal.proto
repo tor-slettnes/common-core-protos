@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file signal.proto
 /// @brief Message type and enumerations for use in signal streams
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 // Definitions and data types used to implement the signal/slot pattern using

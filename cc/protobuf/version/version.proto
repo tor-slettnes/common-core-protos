@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file version.proto
 /// @brief Obtain information about the service
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file vfs.proto
 /// @brief Virtual Filesystem  gRPC/ProtoBuf interface
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

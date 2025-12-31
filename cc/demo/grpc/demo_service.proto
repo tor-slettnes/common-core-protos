@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file demo_types.proto
 /// @brief data types used in Demo application
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

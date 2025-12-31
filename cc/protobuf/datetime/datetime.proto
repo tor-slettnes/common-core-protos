@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file datetime.proto
 /// @brief ProtoBuf message types for calendar/clock types
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file multilogger.proto
 /// @brief MultiLogger data types
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";

@@ -2,7 +2,7 @@
 #==============================================================================
 ## @file grpc-services-common.yaml
 ## @brief gRPC service settings for core applications
-## @author Tor Slettnes <tor@slett.net>
+## @author Tor Slettnes
 #==============================================================================
 
 # Default endpoints for common applications. In addtiion to these, settings for

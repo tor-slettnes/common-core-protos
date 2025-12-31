@@ -2,7 +2,7 @@
 //==============================================================================
 /// @file variant.proto
 /// @brief ProtoBuf message types for Common Core variant values
-/// @author Tor Slettnes <tor@slett.net>
+/// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";
