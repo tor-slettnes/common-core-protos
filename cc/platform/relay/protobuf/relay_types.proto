@@ -1,0 +1,39 @@
+// -*- Protocol-Buffers -*-
+//==============================================================================
+/// @file relay_types.proto
+/// @brief Relay data types
+/// @author Tor Slettnes
+//==============================================================================
+
+syntax = "proto3";
+
+package cc.platform.relay.protobuf;
+
+import "cc/protobuf/variant/variant.proto";
+
+message Message
+{
+    // Message topic
+    string topic = 2;
+
+    // Payload.
+    cc.protobuf.variant.Value payload = 15;
+}
+
+message Filters
+{
+    // Zero or more message filters.  A subscription request with no filters
+    // will match all messages.
+    repeated string topics = 2;
+}
+
+message Topics
+{
+    repeated string topics = 2;
+};
+
+
+message SubscriberList
+{
+    repeated string subscriber_id = 2;
+};
