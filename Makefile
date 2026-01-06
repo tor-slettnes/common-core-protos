@@ -4,6 +4,7 @@
 
 PROTOC    = protoc
 SRC_DIR   = cc
+REF_BRANCH = main
 OUT_DIR   = gen
 BUF_BIN   = $(HOME)/.local/bin/buf
 BUF_SRC   = https://github.com/bufbuild/buf/releases/latest/download/buf-$(shell uname -s)-$(shell uname -m)
@@ -21,12 +22,12 @@ default: lint
 
 .PHONY: lint
 lint: buf
-	@buf lint
+	@$(BUF_BIN) lint
 	@echo "✅ Checks passed"
 
 .PHONY: check_breaking
 check_breaking: buf
-	@buf breaking --against '.git#branch=main'
+	@$(BUF_BIN) breaking --against '.git#branch=$(REF_BRANCH)'
 	@echo "✅ No breaking changes"
 
 .PHONY: build
@@ -37,15 +38,16 @@ generate: bufgenerate
 	@echo "✅ Native language bindings generated under 'gen/'"
 	@echo
 	@echo "Reminder:"
-	@echo "    These are provided only as a reference; do not include them in your own build."
-	@echo "    Instead, use the build tools from your parent repository (e.g. CMake, pantsbuild,"
-	@echo "    buf.build, plain Makefile, etc) to generate native-language bindings".
+	@echo "    These are provided only as a reference; do not include them in your"
+	@echo "    own build.  Instead, use the build tools from your parent repository"
+	@echo "    (e.g. CMake, pantsbuild, buf.build, plain Makefile, etc) to generate"
+	@echo "    native language bindings."
 	@echo
 
 .PHONY: bufgenerate
 bufgenerate: buf
 	@echo "Generating bindings for multiple languages with 'buf'"
-	@buf generate
+	@$(BUF_BIN) generate
 
 .PHONY: buf install_buf
 buf install_buf: $(BUF_BIN)
@@ -87,4 +89,3 @@ grpc-%:
 	@mkdir -p '$(OUT_DIR)/$*'
 	@find $(SRC_DIR) -name *.proto -exec \
 		$(PROTOC) --grpc_out=$(OUT_DIR)/$* --plugin=protoc-gen-grpc=/usr/bin/grpc_$*_plugin {} +
-
