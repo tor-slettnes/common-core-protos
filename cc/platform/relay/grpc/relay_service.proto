@@ -18,8 +18,13 @@ service Relay
     rpc Reader (relay.protobuf.Filters)
         returns (stream relay.protobuf.Message);
 
-    // Write/publish to messages to relay.
+    // Write/publish a stream of messages to relay.
     rpc Writer (stream relay.protobuf.Message)
         returns (google.protobuf.Empty);
+
+    // Publish a single message to relay.
+    rpc Publish (relay.protobuf.Message)
+        returns (google.protobuf.Empty);
+
 }
 
