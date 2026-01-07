@@ -11,7 +11,7 @@ package cc.platform.pubsub.protobuf;
 
 import "cc/protobuf/variant/variant.proto";
 
-message Message
+message Publication
 {
     // Message topic
     string topic = 2;

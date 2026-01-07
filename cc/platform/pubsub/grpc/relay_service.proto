@@ -16,14 +16,14 @@ service Relay
 {
     // Read/subscribe to messages from broker.
     rpc Subscriber (pubsub.protobuf.Filters)
-        returns (stream pubsub.protobuf.Message);
+        returns (stream pubsub.protobuf.Publication);
 
     // Write/publish a stream of messages to pubsub.
-    rpc Publisher (stream pubsub.protobuf.Message)
+    rpc Publisher (stream pubsub.protobuf.Publication)
         returns (google.protobuf.Empty);
 
     // Publish a single message to pubsub.
-    rpc Publish (pubsub.protobuf.Message)
+    rpc Publish (pubsub.protobuf.Publication)
         returns (google.protobuf.Empty);
 
 }
