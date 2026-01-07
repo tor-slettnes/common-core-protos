@@ -1,0 +1,29 @@
+// -*- Protocol-Buffers -*-
+//==============================================================================
+/// @file relay_service.proto
+/// @brief Pub/Sub Relay gRPC interface
+/// @author Tor Slettnes
+//==============================================================================
+
+syntax = "proto3";
+
+package cc.platform.pubsub.grpc;
+
+import "google/protobuf/empty.proto";
+import "cc/platform/pubsub/protobuf/pubsub_types.proto";
+
+service Relay
+{
+    // Read/subscribe to messages from broker.
+    rpc Subscriber (pubsub.protobuf.Filters)
+        returns (stream pubsub.protobuf.Message);
+
+    // Write/publish a stream of messages to pubsub.
+    rpc Publisher (stream pubsub.protobuf.Message)
+        returns (google.protobuf.Empty);
+
+    // Publish a single message to pubsub.
+    rpc Publish (pubsub.protobuf.Message)
+        returns (google.protobuf.Empty);
+
+}

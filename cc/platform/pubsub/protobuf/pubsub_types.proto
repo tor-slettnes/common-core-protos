@@ -1,13 +1,13 @@
 // -*- Protocol-Buffers -*-
 //==============================================================================
-/// @file relay_types.proto
-/// @brief Relay data types
+/// @file pubsub_types.proto
+/// @brief Pub/Sub data types
 /// @author Tor Slettnes
 //==============================================================================
 
 syntax = "proto3";
 
-package cc.platform.relay.protobuf;
+package cc.platform.pubsub.protobuf;
 
 import "cc/protobuf/variant/variant.proto";
 
@@ -26,14 +26,3 @@ message Filters
     // will match all messages.
     repeated string topics = 2;
 }
-
-message Topics
-{
-    repeated string topics = 2;
-};
-
-
-message SubscriberList
-{
-    repeated string subscriber_id = 2;
-};
