@@ -17,7 +17,7 @@ message Publication
     string topic = 2;
 
     // Payload.
-    cc.protobuf.variant.Value payload = 15;
+    cc.protobuf.variant.Value value = 15;
 }
 
 message Filters
