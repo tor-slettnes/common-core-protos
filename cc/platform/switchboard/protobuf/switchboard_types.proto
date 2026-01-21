@@ -128,12 +128,15 @@ message Localization
     //      "internet connectivity"
     string description = 1;
 
-    // Text strings describing transitions to each target position: false, true
-    map<bool, string> target_texts = 2;
-
     // Text strings describing each possible state.  (uint used as key because
     // ProtoBuf does not support enumerated values as mapping keys)
     map<uint32, string> state_texts = 3;
+
+    // Text string describing the transition to ACTIVE (e.g. "lock the door")
+    string activate_text = 4;
+
+    // Text string describing the transition to INACTIVE (e.g. "unlock the door")
+    string deactivate_text = 5;
 }
 
 //==============================================================================
