@@ -181,7 +181,7 @@ message Dependency
     // will not automatically trigger updates based on this dependency
     // (though it will still be considered for any future updates from other
     // events).
-    uint32 trigger_states = 3;
+    repeated State trigger_states = 3;
 
     // Whether this is a normal/positive dependency, a negative/conflicting
     // dependency, or if the successor switch simply toggles its state in
@@ -220,39 +220,54 @@ enum DependencyPolarity
 //==============================================================================
 // Interceptors
 
-message AddInterceptorRequest
-{
-    // Switch name
-    string switch_name = 1;
-
-    // Interceptor name
-    string interceptor_name = 2;
-
-    // Interceptor specification
-    InterceptorSpec spec  = 4;
-
-    // If True, and if the `states` mask include the current state of this
-    // switch, invoke the interceptor immediately. In this case, unless
-    // the interceptor's `asynchronous` flag is also True, the call blocks
-    // until it has completed.
-    bool immediate = 7;
-}
-
-
-message RemoveInterceptorRequest
-{
-    // Switch name
-    string switch_name = 1;
-
-    // Interceptor name
-    string interceptor_name = 2;
-}
-
 
 message InterceptorMap
 {
     // Map of interceptor IDs and corresponding specifications
     map<string, InterceptorSpec> map = 1;
+}
+
+
+// Interceptor update streamed from client to server.
+message InterceptorUpdate
+{
+    // Switch name
+    string switch_name = 1;
+
+    // Interceptor name
+    string interceptor_name = 2;
+
+
+    oneof update_type
+    {
+        // Register an interceptor with the server.  Subsequently, any relevant
+        // state changes pertaining to the specified switch will emit an
+        // `InterceptorInvocation` message back to the client
+        InterceptorRegistration registration = 8;
+
+        // Deregister an interceptor.
+        InterceptorDeregistration deregistration = 9;
+
+        // Interceptor invocation result, present in subsequent messages
+        // streamed back from client after invocations initiated by server.
+        InterceptorResult invocation_result = 10;
+    }
+}
+
+
+message InterceptorRegistration
+{
+    // Specifications for the interceptor
+    InterceptorSpec spec = 1;
+
+    // Invoke the interceptor fimmediately upon registration if the `states`
+    // mask includes the current state of the specified switch.
+    bool immediate = 2;
+}
+
+
+message InterceptorDeregistration
+{
 }
 
 message InterceptorSpec
@@ -261,10 +276,10 @@ message InterceptorSpec
     // Once that service is no longer available the interceptor is implicitly removed.
     string owner = 2;
 
-    // A bitmask representing states for which the interceptor is invoked.
-    // Often just a single transitional state, i.e., `STATE_ACTIVATING`,
-    // `STATE_DEACTIVATING` or `STATE_FAILING`.  Required.
-    uint32 state_transitions = 4;
+    // State transitions for which this interceptor is invoked.  Often just a
+    // single transitional state, e.g., `STATE_ACTIVATING`, `STATE_DEACTIVATING`
+    // or `STATE_FAILING`. Required.
+    repeated State state_transitions = 4;
 
     // Control whether this interceptor is invoked prior to, concurrent with, or after
     // the main interceptors for this state transition.
@@ -286,6 +301,19 @@ message InterceptorSpec
     // How to proceed if the interceptor encounters an error. The default value
     // `EH_DEFAULT` is equivalent to `EH_FAIL`.
     ExceptionHandling on_error = 15;
+}
+
+
+message InterceptorInvocation
+{
+    string switch_name = 2;
+    string interceptor_name = 3;
+    State state = 4;
+}
+
+message InterceptorResult
+{
+    optional cc.protobuf.status.Error error = 8;
 }
 
 
@@ -317,20 +345,6 @@ enum ExceptionHandling
     EH_REVERT          = 4;  // Transition back to previous state, do not retain error
 }
 
-
-message InterceptorInvocation
-{
-    string switch_name = 1;
-    string interceptor_name = 2;
-    State state = 3;
-}
-
-message InterceptorResult
-{
-    string switch_name = 1;
-    string interceptor_name = 2;
-    optional cc.protobuf.status.Error error = 8;
-}
 
 
 //==============================================================================

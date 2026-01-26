@@ -1,0 +1,9 @@
+#Remove .DS_Store
+.DS_Store
+
+#Remove .vscode
+.vscode/
+
+# buf build output
+/gen/
+/out/
