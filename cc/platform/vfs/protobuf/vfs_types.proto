@@ -28,6 +28,16 @@ enum PathType
 }
 
 
+message GetContextsRequest
+{
+    // Return only contexts that are currently open
+    bool open_only = 4;
+
+    // Return only removable contexts
+    bool removable_only = 5;
+}
+
+
 message ContextSpec
 {
     // Name for this context.

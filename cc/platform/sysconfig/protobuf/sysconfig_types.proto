@@ -118,6 +118,8 @@ message TimeZoneCountry
 
 message TimeZoneRegions
 {
+    // Timezone regions within a country.
+    // Example: `Eastern`, `Central`, `Mountain`, `Pacific`.
     repeated string regions = 1;
 }
 

@@ -17,11 +17,7 @@ import "cc/platform/vfs/protobuf/vfs_types.proto";
 service VirtualFileSystem
 {
     // List known virtual filesystem contexts.
-    rpc GetContexts (google.protobuf.Empty)
-        returns (vfs.protobuf.ContextMap);
-
-    // List open virtual filesystem contexts.
-    rpc GetOpenContexts (google.protobuf.Empty)
+    rpc GetContexts (vfs.protobuf.GetContextsRequest)
         returns (vfs.protobuf.ContextMap);
 
     // List known virtual filesystem contexts.
