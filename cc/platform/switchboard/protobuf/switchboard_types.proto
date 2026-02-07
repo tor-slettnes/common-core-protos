@@ -48,7 +48,7 @@ message ImportRequest
 {
     // List of variant key/value maps containing switch declarations,
     // which should ahere to the same structure as in switch settings files.
-    cc.protobuf.variant.KeyValueMap declarations = 4;
+    cc.protobuf.variant.KeyValueMap declarations = 3;
 
     // Replace existing specifications when importing
     bool replace_specifications = 8;
