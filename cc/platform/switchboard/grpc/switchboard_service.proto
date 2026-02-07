@@ -37,8 +37,14 @@ service Switchboard
     rpc RemoveSwitch (switchboard.protobuf.RemoveSwitchRequest)
         returns (google.protobuf.BoolValue);
 
+    // Import switches from a variant container.
+    // This may be used to define switches from a settings file.
     rpc ImportSwitches (switchboard.protobuf.ImportRequest)
         returns (switchboard.protobuf.ImportResponse);
+
+    // Export switches to a variant container.
+    rpc ExportSwitches (switchboard.protobuf.ExportRequest)
+        returns (switchboard.protobuf.ExportResponse);
 
     // Update the specification of a switch.
     rpc SetSpecification (switchboard.protobuf.SetSpecificationRequest)

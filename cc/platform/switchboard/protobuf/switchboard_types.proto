@@ -26,7 +26,6 @@ message SwitchIdentifiers
     repeated string switch_names = 1;
 }
 
-
 message AddSwitchRequest
 {
     // Switch name to add
@@ -47,13 +46,51 @@ message RemoveSwitchRequest
 
 message ImportRequest
 {
-    cc.protobuf.variant.ValueList declarations = 4;
+    // List of variant key/value maps containing switch declarations,
+    // which should ahere to the same structure as in switch settings files.
+    cc.protobuf.variant.KeyValueMap declarations = 4;
+
+    // Replace existing specifications when importing
+    bool replace_specifications = 8;
+
+    // Replace existing statuses when importing
+    bool replace_statuses = 9;
 }
 
 message ImportResponse
 {
     uint64 import_count = 1;
 }
+
+message ExportRequest
+{
+    // Switches to include in export.
+    // If no names are specified specified, export all switches.
+    optional SwitchSelection selection = 4;
+
+    // Include switch specifications in export (default: false)
+    optional bool include_specifications = 8;
+
+    // Include switch statuses in export (default: true)
+    optional bool include_statuses = 9;
+}
+
+message ExportResponse
+{
+    cc.protobuf.variant.KeyValueMap declarations = 4;
+}
+
+message SwitchSelection
+{
+    // Switch name pattern.  Shell-style globbing using wildcards ('*' and '?')
+    // or character ranges ('[A-Z]') are supported.
+    repeated string patterns = 4;
+
+    // The pattern is a regular expression.
+    bool is_regex = 5;
+}
+
+
 
 //==============================================================================
 // Specification
