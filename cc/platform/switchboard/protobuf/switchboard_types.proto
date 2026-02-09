@@ -50,11 +50,11 @@ message ImportRequest
     // which should ahere to the same structure as in switch settings files.
     cc.protobuf.variant.KeyValueMap declarations = 3;
 
-    // Replace existing specifications when importing
-    bool replace_specifications = 8;
+    // Replace existing specifications when importing (default: false)
+    optional bool replace_specifications = 8;
 
-    // Replace existing statuses when importing
-    bool replace_statuses = 9;
+    // Replace existing statuses when importing (default: true)
+    optional bool replace_statuses = 9;
 }
 
 message ImportResponse
