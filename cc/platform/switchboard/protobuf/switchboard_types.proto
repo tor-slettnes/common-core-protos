@@ -382,6 +382,16 @@ enum ExceptionHandling
     EH_REVERT          = 4;  // Transition back to previous state, do not retain error
 }
 
+enum CascadeStyle
+{
+    // How to propagate state change to descendants.
+
+    CASCADE_NONE           = 0; // Do not propagate state change
+    CASCADE_ASYNC          = 1; // Update descendant states asynchronously
+    CASCADE_WAIT_DIRECT    = 2; // Wait for direct successors to complete update
+    CASCADE_WAIT_RECURSIVE = 3; // Wait for all descendants to compllete update
+}
+
 
 
 //==============================================================================
@@ -415,10 +425,12 @@ message SetTargetRequest
     bool clear_existing = 8;
 
     // Invoke interceptors for the relevant state transitions.
-    bool with_interceptors = 9;
+    // Default: true.
+    optional bool invoke_interceptors = 9;
 
-    // Update successors after each state transition.
-    bool trigger_descendants = 10;
+    // How to update descendant switches if state changes.
+    // Default: CASCADE_ASYNC
+    optional CascadeStyle cascade_descendants = 10;
 
     // Make the state transition even if the switch is already in the
     // ddesired target state.
