@@ -322,7 +322,7 @@ message InterceptorSpec
     // the main interceptors for this state transition.
     InterceptorPhase phase = 5;
 
-    // Allow state to transition to the next state (normally `STATE_ACITVE,
+    // Allow state to transition to the next state (normally `STATE_ACTIVE`,
     // `STATE_INACTIVE` or `STATE_FAILED`) even if this interceptor continues
     // to run in the background.
     bool asynchronous = 6;
