@@ -32,7 +32,7 @@ message AddSwitchRequest
     string switch_name = 1;
 
     // Initial value
-    bool active = 2;
+    optional bool active = 2;
 }
 
 message RemoveSwitchRequest
@@ -193,7 +193,8 @@ message AddDependencyRequest
     // Allow existing dependency to be updated
     optional bool allow_update = 4;
 
-    // Reevaluate switch state after dependency has been added (default: true).
+    // Automatically update the switch state after adding the dependency.
+    // (Default: true)
     optional bool reevaluate = 5;
 }
 
@@ -257,6 +258,42 @@ enum DependencyPolarity
 //==============================================================================
 // Interceptors
 
+message AddInterceptorRequest
+{
+    // Interceptor name.
+    string interceptor_name = 1;
+
+    // Interceptor specification
+    InterceptorSpec spec  = 4;
+
+    // Switches to which this interceptor will be added.
+    SwitchSelection switch_selection = 5;
+
+    // If True, and if the `states` mask include the current state of this
+    // switch, invoke the interceptor immediately. In this case, unless the
+    // interceptor's `asynchronous` flag is also True, the call blocks until the
+    // it has completed.
+    bool immediate = 8;
+
+    // Add this interceptor also to matchihng switches created in the future.
+    bool future = 9;
+}
+
+
+message RemoveInterceptorRequest
+{
+    // Unique mapping key.
+    string interceptor_name = 2;
+
+    // Specific switches from which this interceptor will be removed.  By
+    // default it is removed from all existing switches, and will not be added
+    // to switches created in the future.
+    optional SwitchSelection switch_selection = 3;
+
+    // Abandon any pending invocations of this interceptor
+    bool abandon_pending = 8;
+}
+
 
 message InterceptorMap
 {
@@ -265,53 +302,12 @@ message InterceptorMap
 }
 
 
-// Interceptor update streamed from client to server.
-message InterceptorUpdate
-{
-    // Switch name
-    string switch_name = 1;
-
-    // Interceptor name
-    string interceptor_name = 2;
-
-
-    oneof update_type
-    {
-        // Register an interceptor with the server.  Subsequently, any relevant
-        // state changes pertaining to the specified switch will emit an
-        // `InterceptorInvocation` message back to the client
-        InterceptorRegistration registration = 8;
-
-        // Deregister an interceptor.
-        InterceptorDeregistration deregistration = 9;
-
-        // Interceptor invocation result, present in subsequent messages
-        // streamed back from client after invocations initiated by server.
-        InterceptorResult invocation_result = 10;
-    }
-}
-
-
-message InterceptorRegistration
-{
-    // Specifications for the interceptor
-    InterceptorSpec spec = 1;
-
-    // Invoke the interceptor fimmediately upon registration if the `states`
-    // mask includes the current state of the specified switch.
-    bool immediate = 2;
-}
-
-
-message InterceptorDeregistration
-{
-}
-
 message InterceptorSpec
 {
-    // Service that owns this interceptor.
-    // Once that service is no longer available the interceptor is implicitly removed.
-    string owner = 2;
+    // Service that owns this interceptor. This is normally populated by the
+    // server on creation.  Once that service is no longer available the
+    // interceptor is implicitly removed.
+    optional string owner = 2;
 
     // State transitions for which this interceptor is invoked.  Often just a
     // single transitional state, e.g., `STATE_ACTIVATING`, `STATE_DEACTIVATING`
@@ -350,6 +346,8 @@ message InterceptorInvocation
 
 message InterceptorResult
 {
+    string switch_name = 2;
+    string interceptor_name = 3;
     optional cc.protobuf.status.Error error = 8;
 }
 
@@ -434,7 +432,7 @@ message SetTargetRequest
 
     // Make the state transition even if the switch is already in the
     // ddesired target state.
-    bool reevaluate = 11;
+    bool reenter = 11;
 
     // What to do if the state transition is cancelled, e.g. if
     // pre-empted by another target setting while executing interceptrs.

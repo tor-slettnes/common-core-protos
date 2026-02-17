@@ -79,19 +79,31 @@ service Switchboard
     rpc GetDescendants (switchboard.protobuf.SwitchIdentifier)
         returns (switchboard.protobuf.SwitchIdentifiers);
 
-    // Register and operate an interceptor, i.e., a callback handler in the
-    // client that will subsequently be invoked whenever a switch changes state.
+    // Add an interceptor, i.e., a callback handler in the client that will be
+    // invoked when the specified switch changes its current state.
     //
-    // - The initial message from the client must contain a `registration`
-    //   field, describing various conditions for when and how the interceptor
-    //   will be invoked.
+    // As a prerequisite for this invocation, the client must have opeend a
+    // bidirectional stream with the `Intercept()` call, through which it
+    // receives invocations and responds back to the server once the interceptor
+    // has completed.
     //
-    // - Subsequently, the server streams back invocation requests whenever an
-    //   applicable state change occurs, to which the client responds with an
-    //   update containing the invocation result (basically, any error that
-    //   occured).
-    rpc Intercept (stream switchboard.protobuf.InterceptorUpdate)
-        returns (stream switchboard.protobuf.InterceptorInvocation);
+    // After changing its state, a switch will normally wait for all associated
+    // interceptors to complete before undergoing any further state transitions.
+    //
+    // This clal returns a boolean indicating whether the interceptor was added.
+    rpc AddInterceptor (switchboard.protobuf.AddInterceptorRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Remove an existing interceptor.
+    // Return a boolean indicating whether the interceptor existed and was removed.
+    rpc RemoveInterceptor (switchboard.protobuf.RemoveInterceptorRequest)
+        returns (google.protobuf.BoolValue);
+
+    // Remove all interceptors belonging to the requesting client.
+    // Returns a boolean intdicating whether any interceptors were removed.
+    rpc ClearInterceptors (switchboard.protobuf.RemoveInterceptorRequest)
+        returns (google.protobuf.BoolValue);
+
 
     // Get a list of interceptors associated with the specified switch.
     // Note that this also includes interceptors owned by other clients.
@@ -102,6 +114,11 @@ service Switchboard
     // a switch changing its current state.  Primarily a diagnostic tool.
     rpc InvokeInterceptor (switchboard.protobuf.InterceptorInvocation)
         returns (switchboard.protobuf.InterceptorResult);
+
+    // Register to receive interceptor invocations from the server.
+    // This is a prerequistie for the `AddIterceptor()` call.
+    rpc Intercept (stream switchboard.protobuf.InterceptorResult)
+        returns (stream switchboard.protobuf.InterceptorInvocation);
 
     // Change the state of a switch, either to an explicit target state
     // or to a target state inferred based on its dependencies.
