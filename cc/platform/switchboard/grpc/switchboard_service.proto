@@ -37,6 +37,11 @@ service Switchboard
     rpc RemoveSwitch (switchboard.protobuf.RemoveSwitchRequest)
         returns (google.protobuf.BoolValue);
 
+    // Remove all switches, optionally reloading default ones into their initial
+    // state.  Returns true if any changes took place.
+    rpc ClearSwitches (switchboard.protobuf.ClearSwitchesRequest)
+        returns (google.protobuf.BoolValue);
+
     // Import switches from a variant container.
     // This may be used to define switches from a settings file.
     rpc ImportSwitches (switchboard.protobuf.ImportRequest)

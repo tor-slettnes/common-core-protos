@@ -44,6 +44,12 @@ message RemoveSwitchRequest
     optional bool propagate = 2;
 }
 
+message ClearSwitchesRequest
+{
+    // After clearing, reload default switches into their initial state.
+    bool reload = 8;
+}
+
 message ImportRequest
 {
     // List of variant key/value maps containing switch declarations,
