@@ -142,6 +142,11 @@ service Switchboard
     rpc SetAttributes (switchboard.protobuf.SetAttributesRequest)
         returns (switchboard.protobuf.SetAttributesResponse);
 
+    // Get key/value attributes assigned to a switch, optionally
+    // with those of its ancestors merged in recursively.
+    rpc GetAttributes (switchboard.protobuf.GetAttributesRequest)
+        returns (switchboard.protobuf.GetAttributesResponse);
+
     // Get current status for the specified switches.
     // If no identifiers are provided, get status of all switches.
     rpc GetStatuses (switchboard.protobuf.SwitchIdentifiers)

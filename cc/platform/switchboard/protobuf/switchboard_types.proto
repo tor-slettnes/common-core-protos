@@ -345,9 +345,20 @@ message InterceptorSpec
 
 message InterceptorInvocation
 {
+    // Switch which this interceptor is invoked ("owner")
     string switch_name = 2;
+
+    // Interceptor name.  This will normally be used by the client to
+    // look up a registered interceptor method.
     string interceptor_name = 3;
+
+    // Switch state that triggered the interceptor.  This will normally be one
+    // of the transitional states ACTIVATING, DEACTIVATING, or FAILING.
     State state = 4;
+
+    // Key/value attributes assigned to the owning Switch following this update,
+    // with those of its ancestor Switches recursively merged in.
+    cc.protobuf.variant.KeyValueMap cascaded_attributes = 7;
 }
 
 message InterceptorResult
@@ -478,11 +489,30 @@ message SetAttributesResponse
     bool updated = 2;
 }
 
+
+message GetAttributesRequest
+{
+    // Switch for which we are getting attributes
+    string switch_name = 1;
+
+    // Also recursively merge in attributes from its ancestors
+    bool inherit = 8;
+}
+
+
+message GetAttributesResponse
+{
+    // Attributes assigned to the specified switch, possibly with those of its
+    // ancestors merged in.
+    cc.protobuf.variant.KeyValueMap attributes = 8;
+}
+
+
 message CulpritsQuery
 {
     string switch_name = 1;
 
-    // Expected switch value. If not explicitly provided, server assumes `true`.
+    // Expected switch value. Default: `true`.
     optional bool expected = 2;
 }
 
