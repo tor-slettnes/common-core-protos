@@ -61,6 +61,10 @@ message ImportRequest
 
     // Replace existing statuses when importing (default: true)
     optional bool replace_statuses = 9;
+
+    // Invoke interceptors following the initial state change, if any.
+    // Default: INVOKE_INDIRECT
+    optional InvocationStyle invoke_interceptors = 12;
 }
 
 message ImportResponse
