@@ -397,6 +397,15 @@ enum ExceptionHandling
     EH_REVERT          = 4;  // Transition back to previous state, do not retain error
 }
 
+enum InvocationStyle
+{
+    // Control how interceptors are invoked in response to a state change
+
+    INVOKE_NONE           = 0; // Do not invoke interceptors
+    INVOKE_ALL            = 1; // Invoke interceptors on switch and its descendants
+    INVOKE_INDIRECT       = 2; // Skip direct interceptors, invoke only on descendants
+}
+
 enum CascadeStyle
 {
     // How to propagate state change to descendants.
@@ -440,8 +449,8 @@ message SetTargetRequest
     bool clear_existing = 8;
 
     // Invoke interceptors for the relevant state transitions.
-    // Default: true.
-    optional bool invoke_interceptors = 9;
+    // Default: INVOKE_ALL
+    optional InvocationStyle invoke_interceptors = 9;
 
     // How to update descendant switches if state changes.
     // Default: CASCADE_ASYNC
