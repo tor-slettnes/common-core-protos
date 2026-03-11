@@ -26,6 +26,19 @@ message SwitchIdentifiers
     repeated string switch_names = 1;
 }
 
+message SwitchSelection
+{
+    // Switch name pattern.  Shell-style globbing using wildcards ('*' and '?')
+    // or character ranges ('[A-Z]') are supported.
+    repeated string patterns = 4;
+
+    // The pattern is a regular expression.
+    bool is_regex = 5;
+
+    // Recursively include ancestors
+    bool with_ancestors = 6;
+}
+
 message AddSwitchRequest
 {
     // Switch name to add
@@ -89,17 +102,6 @@ message ExportResponse
 {
     cc.protobuf.variant.KeyValueMap declarations = 4;
 }
-
-message SwitchSelection
-{
-    // Switch name pattern.  Shell-style globbing using wildcards ('*' and '?')
-    // or character ranges ('[A-Z]') are supported.
-    repeated string patterns = 4;
-
-    // The pattern is a regular expression.
-    bool is_regex = 5;
-}
-
 
 
 //==============================================================================
