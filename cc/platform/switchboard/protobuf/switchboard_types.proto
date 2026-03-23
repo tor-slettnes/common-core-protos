@@ -267,6 +267,30 @@ enum DependencyPolarity
 };
 
 
+
+message DependencyStatusMap
+{
+    // Map (upstream) state names to corresponding dependency status
+    map<string, DependencyStatus> map = 1;
+};
+
+message DependencyStatus
+{
+    // Dependency specification
+    Dependency dependency = 3;
+
+    // Current status of the predecessor
+    optional Status status = 6;
+
+    // (Recursive) map of dependency statues for the predecessor
+    optional DependencyStatusMap dependency_statuses = 7;
+
+    // Whether the dependency is met.  Present only if dependency polarity is
+    // POLARITY_POSITIVE or POLARITY_NEGATIVE.
+    optional bool satisfied = 8;
+};
+
+
 //==============================================================================
 // Interceptors
 
@@ -577,7 +601,7 @@ message SwitchInfo
     // Switch specification
     Specification spec = 1;
 
-    // Swithc status
+    // Switch status
     Status status = 2;
 }
 

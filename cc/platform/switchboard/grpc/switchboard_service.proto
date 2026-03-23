@@ -84,6 +84,11 @@ service Switchboard
     rpc GetDescendants (switchboard.protobuf.SwitchIdentifier)
         returns (switchboard.protobuf.SwitchIdentifiers);
 
+    // Obtain a recursive tree of ancestors for a switch, with indciation of
+    // each ancestor's current state and whether the dependency is satisfied.
+    rpc GetDependencyStatuses (switchboard.protobuf.SwitchIdentifier)
+        returns (switchboard.protobuf.DependencyStatusMap);
+
     // Add an interceptor, i.e., a callback handler in the client that will be
     // invoked when the specified switch changes its current state.
     //
@@ -152,7 +157,7 @@ service Switchboard
     rpc GetStatuses (switchboard.protobuf.SwitchSelection)
         returns (switchboard.protobuf.StatusMap);
 
-    // Obtain cuplrits indicating why a given switch is currently not set.
+    // Obtain culprits indicating why a given switch is currently not set.
     // Returns a map of upstream switches (direct or indirect ancestors)
     // whose current values are in conflict with this switch.
     rpc GetCulprits (switchboard.protobuf.CulpritsQuery)
