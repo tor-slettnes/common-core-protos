@@ -559,7 +559,7 @@ message CulpritsQuery
 enum State
 {
     // Use powers of two, as values are used in bitmasks
-    STATE_INITIAL      = 0x00;
+    STATE_UNSET        = 0x00;
     STATE_ACTIVATING   = 0x01;
     STATE_ACTIVE       = 0x02;
     STATE_DEACTIVATING = 0x04;
