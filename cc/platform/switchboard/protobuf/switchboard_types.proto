@@ -270,7 +270,7 @@ enum DependencyPolarity
 
 message DependencyStatusMap
 {
-    // Map (upstream) state names to corresponding dependency status
+    // Map (upstream) switch names to corresponding dependency status
     map<string, DependencyStatus> map = 1;
 };
 
