@@ -236,7 +236,8 @@ message Dependency
     // Whether this is a normal/positive dependency, a negative/conflicting
     // dependency, or if the successor switch simply toggles its state in
     // response to the ancestor's change.
-    DependencyPolarity polarity = 8;
+    // If not provided, `POLARITY_POSITVE` is assumed.
+    optional DependencyPolarity polarity = 8;
 
     // Prevent descendant from being manually enabled unless this dependency is
     // satisfied.
