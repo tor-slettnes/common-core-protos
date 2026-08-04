@@ -20,9 +20,47 @@ message Publication
     cc.protobuf.variant.Value value = 15;
 }
 
+message Topics
+{
+    repeated string topics = 2;
+}
+
 message Filters
 {
     // Zero or more message filters.  A subscription request with no filters
     // will match all messages.
     repeated string topics = 2;
+
+    // Subscriber-side replay control.
+    ReplayControl replay = 8;
 }
+
+
+enum ReplayControl
+{
+    REPLAY_DEFAULT = 0;         // Stream replay cache, then live publications
+    REPLAY_OFF     = 1;         // Skip replay, stream only live publications
+    REPLAY_ONLY    = 2;         // Replay cached publications, then close stream
+}
+
+
+message ReplayPolicyMap
+{
+    map<string, ReplayPolicy> map = 2;
+}
+
+message ReplayPolicy
+{
+    // Cache and replay the latest publication(s) on this topic to future
+    // subscribers. Multiple messages may be replayed if one or more
+    // `mapping_keys` are provided, below.
+    bool replay_latest = 8;
+
+    // Optional mapping key(s) for replay when `replay_latest` is enabled.
+    // Subsequently published key/value maps are then mapped into the replay
+    // cache by their corresponding top-level values.  This means that future
+    // subscribers will receive the latest publications for each corresponding
+    // key/value combination.
+    repeated string mapping_keys = 9;
+}
+

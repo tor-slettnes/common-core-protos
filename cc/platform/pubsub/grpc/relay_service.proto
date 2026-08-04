@@ -14,9 +14,20 @@ import "cc/platform/pubsub/protobuf/pubsub_types.proto";
 
 service Relay
 {
-    // Read/subscribe to messages from broker.
-    rpc Subscriber (pubsub.protobuf.Filters)
-        returns (stream pubsub.protobuf.Publication);
+    // Set custom replay policies on the specified topics
+    // If no topics are listed, obtain all replay policies.
+    rpc AssignReplayPolicies (pubsub.protobuf.ReplayPolicyMap)
+        returns (google.protobuf.Empty);
+
+    // Remove custom replay policies on the specified topics.
+    // If no topics are listed, remove all replay policies.
+    rpc UnassignReplayPolicies (pubsub.protobuf.Topics)
+        returns (google.protobuf.Empty);
+
+    // List replay policies currently in effect on the specified topics.
+    // If no topics are given, list all current replay policies.
+    rpc GetReplayPolicies (pubsub.protobuf.Topics)
+        returns (pubsub.protobuf.ReplayPolicyMap);
 
     // Write/publish a stream of messages to pubsub.
     rpc Publisher (stream pubsub.protobuf.Publication)
@@ -25,5 +36,9 @@ service Relay
     // Publish a single message to pubsub.
     rpc Publish (pubsub.protobuf.Publication)
         returns (google.protobuf.Empty);
+
+    // Read/subscribe to messages from broker.
+    rpc Subscriber (pubsub.protobuf.Filters)
+        returns (stream pubsub.protobuf.Publication);
 
 }
