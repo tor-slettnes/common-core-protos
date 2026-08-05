@@ -53,14 +53,29 @@ message ReplayPolicy
 {
     // Cache and replay the latest publication(s) on this topic to future
     // subscribers. Multiple messages may be replayed if one or more
-    // `mapping_keys` are provided, below.
-    bool replay_latest = 8;
+    // `key_paths` are provided, below.
+    optional bool replay_latest = 8;
 
-    // Optional mapping key(s) for replay when `replay_latest` is enabled.
-    // Subsequently published key/value maps are then mapped into the replay
-    // cache by their corresponding top-level values.  This means that future
-    // subscribers will receive the latest publications for each corresponding
-    // key/value combination.
-    repeated string mapping_keys = 9;
+    // A sequence of hierachical paths to nested values expected to be present
+    // in subsequently published key/value payloads. These corresponding values
+    // are then combined into a mapping key, by which the message is mapped and
+    // retained in the server's replay cache.
+    //
+    // In other words, at any point in time the relay retains a snapshot of the
+    // latest publication for each unique combination of values extracted from
+    // these key paths.
+    //
+    // Subsequently, whenever a Subscriber() call is initiated by a client, this
+    // snapshot of publications is immediately streamed back from the replay
+    // cache, after which real-time streaming of live publications starts.
+    repeated KeyPath key_paths = 10;
 }
 
+message KeyPath
+{
+    // Elements that form a hierachical path to values within published
+    // messages.  Elements leading up to the final one are expected to reference
+    // nested key/value maps, and the final element should refer to a value
+    // suitable as a mapping key (typically a string).
+    repeated string elements = 2;
+}
