@@ -10,10 +10,15 @@ syntax = "proto3";
 package cc.platform.multilogger.grpc;
 
 import "google/protobuf/empty.proto";
+import "cc/protobuf/version/version.proto";
 import "cc/platform/multilogger/protobuf/multilogger_types.proto";
 
 service MultiLogger
 {
+    // Check server presence and API level.
+    rpc ServiceCheck (google.protobuf.Empty)
+        returns (ServiceCheckResponse);
+
     // Log a single message.
     rpc Submit (multilogger.protobuf.Loggable)
         returns (google.protobuf.Empty);
@@ -65,4 +70,23 @@ service MultiLogger
     // `error`.
     rpc ListErrorFields (google.protobuf.Empty)
         returns (multilogger.protobuf.FieldNames);
+}
+
+message ServiceCheckResponse
+{
+    // API level. The client may compare this with `APILEVEL_CURRENT` below to
+    // check interface compatibility.
+    uint64 api_level = 1;
+
+    // Server application name
+    string server_name = 2;
+
+    // Software version running on server.
+    cc.protobuf.version.Version server_version = 3;
+}
+
+enum APILevel
+{
+    APILEVEL_NONE    = 0;   // Enum sentinel
+    APILEVEL_CURRENT = 1;   // Increment this if breaking changes are introduced
 }

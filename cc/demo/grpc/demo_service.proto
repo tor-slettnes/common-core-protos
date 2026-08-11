@@ -10,6 +10,7 @@ syntax = "proto3";
 package cc.demo.grpc;
 
 import "google/protobuf/empty.proto";
+import "cc/protobuf/version/version.proto";
 import "cc/protobuf/signal/signal.proto";
 import "cc/demo/protobuf/demo_types.proto";
 
@@ -18,6 +19,10 @@ import "cc/demo/protobuf/demo_types.proto";
 
 // Simple service to showcase command/response and event propagation
 service Demo {
+    // Check server presence and API level.
+    rpc ServiceCheck (google.protobuf.Empty)
+        returns (ServiceCheckResponse);
+
     // Send a greeting to other listeners
     rpc SayHello (cc.demo.protobuf.Greeting)
         returns (google.protobuf.Empty);
@@ -37,4 +42,31 @@ service Demo {
     // Stream signals from the server
     rpc Watch (cc.protobuf.signal.Filter)
         returns (stream cc.demo.protobuf.Signal);
+
+}
+
+// We define the `ServiceCheckResponse` type here so that at least one message
+// type is colocated in the same `.proto` file as the gRPC service, above.  This
+// is to work around an issue in Go-based introspection tools (such as
+// `grpc-ui`), which fail to query for reflection information from the server if
+// a .proto file contains only services and zero message definitions.
+
+message ServiceCheckResponse
+{
+    // API level. The client may compare this with `APILEVEL_CURRENT` below to
+    // check interface compatibility.
+    uint64 api_level = 1;
+
+    // Server application name
+    string server_name = 2;
+
+    // Software version running on server.
+    cc.protobuf.version.Version server_version = 3;
+}
+
+
+enum APILevel
+{
+    APILEVEL_NONE    = 0;   // Enum sentinel
+    APILEVEL_CURRENT = 1;   // Increment this if breaking changes are introduced
 }

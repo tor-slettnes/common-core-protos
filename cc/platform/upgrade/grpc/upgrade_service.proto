@@ -10,11 +10,16 @@ syntax = "proto3";
 package cc.platform.upgrade.grpc;
 
 import "google/protobuf/empty.proto";
+import "cc/protobuf/version/version.proto";
 import "cc/protobuf/signal/signal.proto";
 import "cc/platform/upgrade/protobuf/upgrade_types.proto";
 
 service Upgrade
 {
+    // Check server presence and API level.
+    rpc ServiceCheck (google.protobuf.Empty)
+        returns (ServiceCheckResponse);
+
     // Explicit scan for available upgrade packages in the specified location
     // if provided, otherwise in the preconfigured/default locations.
     //
@@ -83,3 +88,23 @@ service Upgrade
     rpc Watch (cc.protobuf.signal.Filter)
         returns (stream upgrade.protobuf.Signal);
 }
+
+message ServiceCheckResponse
+{
+    // API level. The client may compare this with `APILEVEL_CURRENT` below to
+    // check interface compatibility.
+    uint64 api_level = 1;
+
+    // Server application name
+    string server_name = 2;
+
+    // Software version running on server.
+    cc.protobuf.version.Version server_version = 3;
+}
+
+enum APILevel
+{
+    APILEVEL_NONE    = 0;   // Enum sentinel
+    APILEVEL_CURRENT = 1;   // Increment this if breaking changes are introduced
+}
+

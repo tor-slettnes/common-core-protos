@@ -9,7 +9,9 @@ syntax = "proto3";
 
 package cc.platform.switchboard.grpc;
 
+import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
+import "cc/protobuf/version/version.proto";
 import "cc/protobuf/signal/signal.proto";
 import "cc/platform/switchboard/protobuf/switchboard_types.proto";
 
@@ -18,6 +20,10 @@ import "cc/platform/switchboard/protobuf/switchboard_types.proto";
 
 service Switchboard
 {
+    // Check server presence and API level.
+    rpc ServiceCheck (google.protobuf.Empty)
+        returns (ServiceCheckResponse);
+
     // List all switches including specifications and statuses
     // If no switches are selected, return information for all switches.
     rpc GetSwitches (switchboard.protobuf.SwitchSelection)
@@ -174,5 +180,24 @@ service Switchboard
     // change, also if triggered from this client.
     rpc Watch (cc.protobuf.signal.Filter)
         returns (stream switchboard.protobuf.Signal);
+}
+
+message ServiceCheckResponse
+{
+    // API level. The client may compare this with `APILEVEL_CURRENT` below to
+    // check interface compatibility.
+    uint64 api_level = 1;
+
+    // Server application name
+    string server_name = 2;
+
+    // Software version running on server.
+    cc.protobuf.version.Version server_version = 3;
+}
+
+enum APILevel
+{
+    APILEVEL_NONE    = 0;   // Enum sentinel
+    APILEVEL_CURRENT = 1;   // Increment this if breaking changes are introduced
 }
 

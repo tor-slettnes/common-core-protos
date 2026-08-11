@@ -10,10 +10,15 @@ syntax = "proto3";
 package cc.platform.pubsub.grpc;
 
 import "google/protobuf/empty.proto";
+import "cc/protobuf/version/version.proto";
 import "cc/platform/pubsub/protobuf/pubsub_types.proto";
 
 service Relay
 {
+    // Check server presence and API level.
+    rpc ServiceCheck (google.protobuf.Empty)
+        returns (ServiceCheckResponse);
+
     // Set custom replay policies on the specified topics
     // If no topics are listed, obtain all replay policies.
     rpc AssignReplayPolicies (pubsub.protobuf.ReplayPolicyMap)
@@ -42,3 +47,23 @@ service Relay
         returns (stream pubsub.protobuf.Publication);
 
 }
+
+message ServiceCheckResponse
+{
+    // API level. The client may compare this with `APILEVEL_CURRENT` below to
+    // check interface compatibility.
+    uint64 api_level = 1;
+
+    // Server application name
+    string server_name = 2;
+
+    // Software version running on server.
+    cc.protobuf.version.Version server_version = 3;
+}
+
+enum APILevel
+{
+    APILEVEL_NONE    = 0;   // Enum sentinel
+    APILEVEL_CURRENT = 1;   // Increment this if breaking changes are introduced
+}
+

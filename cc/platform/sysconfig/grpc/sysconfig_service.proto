@@ -12,11 +12,16 @@ package cc.platform.sysconfig.grpc;
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
+import "cc/protobuf/version/version.proto";
 import "cc/protobuf/signal/signal.proto";
 import "cc/platform/sysconfig/protobuf/sysconfig_types.proto";
 
 service SysConfig
 {
+    // Check server presence and API level.
+    rpc ServiceCheck (google.protobuf.Empty)
+        returns (ServiceCheckResponse);
+
     //--------------------------------------------------------------------------
     // Product information
 
@@ -127,3 +132,23 @@ service SysConfig
     rpc Watch (cc.protobuf.signal.Filter)
         returns (stream sysconfig.protobuf.Signal);
 }
+
+message ServiceCheckResponse
+{
+    // API level. The client may compare this with `APILEVEL_CURRENT` below to
+    // check interface compatibility.
+    uint64 api_level = 1;
+
+    // Server application name
+    string server_name = 2;
+
+    // Software version running on server.
+    cc.protobuf.version.Version server_version = 3;
+}
+
+enum APILevel
+{
+    APILEVEL_NONE    = 0;   // Enum sentinel
+    APILEVEL_CURRENT = 1;   // Increment this if breaking changes are introduced
+}
+
