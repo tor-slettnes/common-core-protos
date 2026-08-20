@@ -2,12 +2,12 @@
 #
 # Build Common Core Protcol Buffer bindings on POSIX systems
 
-PROTOC    = protoc
-SRC_DIR   = cc
-REF_BRANCH = main
-OUT_DIR   = gen
-BUF_BIN   = $(HOME)/.local/bin/buf
-BUF_SRC   = https://github.com/bufbuild/buf/releases/latest/download/buf-$(shell uname -s)-$(shell uname -m)
+PROTOC     = protoc
+SRC_DIR    = cc
+REF_BRANCH = develop
+OUT_DIR    = gen
+BUF_BIN    = $(HOME)/.local/bin/buf
+BUF_SRC    = https://github.com/bufbuild/buf/releases/latest/download/buf-$(shell uname -s)-$(shell uname -m)
 
 define remove
 	if [ -e "${1}" ]; then \
@@ -76,7 +76,7 @@ cpp: protobuf-cpp grpc-cpp
 python: protobuf-python grpc-python
 java: protobuf-java grpc-java
 cpp python java:
-	@echo "✅ Bindings are generated under 'gen/$@/'"
+	@echo "✅ Bindings are generated under '$(OUT_DIR)/$@/'"
 
 protobuf-%:
 	@echo "Generating ProtoBuf bindings for language: $*"
