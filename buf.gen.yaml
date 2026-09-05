@@ -17,11 +17,10 @@ plugins:
   - remote: buf.build/protocolbuffers/go
     out: gen/go
     opt: paths=source_relative
-  # Python (ProtoBuf)
-  - remote: buf.build/protocolbuffers/python
-    out: gen/python
-  # Python (gRPC)
+  # Python
   - remote: buf.build/grpc/python:v1.76.0
+    out: gen/python
+  - remote: buf.build/protocolbuffers/python
     out: gen/python
   # Rust
   - remote: buf.build/community/neoeinstein-prost
@@ -29,5 +28,10 @@ plugins:
   # TypeScript
   - remote: buf.build/bufbuild/es:v2.10.0
     out: gen/ts
+  # CSharp
+  - remote: buf.build/grpc/csharp:v1.83.1
+    out: gen/csharp
+  - remote: buf.build/protocolbuffers/csharp:v36.1
+    out: gen/csharp
 inputs:
   - directory: .
