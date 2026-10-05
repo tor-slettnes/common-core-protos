@@ -1,0 +1,15 @@
+// -*- Protocol-Buffers -*-
+//==============================================================================
+/// @file uuid.proto
+/// @brief Universally Unique Identifier
+/// @author Tor Slettnes
+//==============================================================================
+
+syntax = "proto3";
+
+package cc.protobuf.uuid;
+
+message UUID
+{
+    bytes value = 1;
+};
