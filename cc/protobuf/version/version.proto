@@ -16,10 +16,10 @@ message Version
     uint64 patch = 3;
 
     // Optional build number
-    uint64 build_number = 6;
+    optional uint64 build_number = 6;
 
-    // Human readable version, if different from `major.minor.patch`.
-    string printable_version = 8;
+    // Human readable version, if different from `major.minor.patch-build_number`.
+    optional string printable_version = 8;
 }
 
 message ComponentVersions
