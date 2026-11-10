@@ -24,23 +24,23 @@ message Error
     Domain domain = 1;
 
     // Domain specific origin, e.g. "Linux", "MyApplication", "HTTP"
-    string origin = 2;
+    optional string origin = 2;
 
     // Priority/Severity level
     Level level = 3;
 
     // Origin specific numeric id
-    sint64 code = 4;
+    optional sint64 code = 4;
 
     // Source specfic symbolic name
     // This is normally unique within each domain, regardless of origin.
-    string symbol = 5;
+    optional string symbol = 5;
 
     // Time of occurence
     optional google.protobuf.Timestamp timestamp = 7;
 
     // Event attributes
-    cc.protobuf.variant.KeyValueMap attributes = 14;
+    optional cc.protobuf.variant.KeyValueMap attributes = 14;
 
     // Description of error, possibly expanded with attribute values.
     string text = 15;
