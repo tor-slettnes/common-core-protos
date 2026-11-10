@@ -37,7 +37,7 @@ message Error
     string symbol = 5;
 
     // Time of occurence
-    google.protobuf.Timestamp timestamp = 7;
+    optional google.protobuf.Timestamp timestamp = 7;
 
     // Event attributes
     cc.protobuf.variant.KeyValueMap attributes = 14;
